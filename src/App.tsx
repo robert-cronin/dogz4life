@@ -1,17 +1,14 @@
-import './App.css';
 import React from 'react';
-import DocumentTitle from 'react-document-title';
-import Header from './components/Header';
 import Banner from './components/Banner';
-import Page1 from './components/Page1';
-import Page2 from './components/Page2';
-import Page3 from './components/Page3';
-import Page4 from './components/Page4';
-import Footer from './components/Footer';
-import './static/style';
+import Navigation from './components/Navigation';
+import Logo from './static/dogz4lifelogo.jpg'
+import DocumentTitle from 'react-document-title';
+import { Layout, BackTop } from 'antd';
+import { UpCircleOutlined } from '@ant-design/icons';
+const { Header, Footer, Content } = Layout;
 
 interface AppProps {
-  
+
 }
 interface AppState {
 }
@@ -22,22 +19,41 @@ class App extends React.Component<AppProps, AppState> {
 
   }
 
-
-  componentDidMount() {
-  }
-
   render() {
+
+    const backTopStyle: React.CSSProperties = {
+      height: 40,
+      width: 40,
+      lineHeight: '40px',
+      borderRadius: 4,
+      color: 'darkblue',
+      textAlign: 'center',
+      fontSize: 30,
+    };
     return (
-      <div className="home-page">
-        <Header key="header" />
-        <Banner key="banner" />
-        <Page1 key="page1" />
-        <Page2 key="page2" />
-        <Page3 key="page3" />
-        <Page4 key="page4" />
-        <Footer key="footer" />
-        <DocumentTitle title="凤蝶 - 移动建站平台" />
-      </div>
+      <>
+        <Layout>
+          <Header>
+            <Navigation />
+          </Header>
+          <Content>
+            <Banner backgroundImage={Logo} />
+            <Banner even>
+            </Banner>
+            <Banner>
+            </Banner>
+            <Banner even>
+            </Banner>
+            <Banner>
+            </Banner>
+          </Content>
+          <Footer>Copyright ©2020 Dogz4Life LLC.</Footer>
+        </Layout>
+        <BackTop style={backTopStyle}>
+          <UpCircleOutlined />
+        </BackTop>
+        <DocumentTitle title="Dogz4Life" />
+      </>
     );
   }
 }
