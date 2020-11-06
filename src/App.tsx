@@ -5,8 +5,8 @@ import Logo from './static/dogz4lifelogo.jpg'
 import Bella from './static/bella.jpg'
 import Benni from './static/benni-silly.jpg'
 import DocumentTitle from 'react-document-title';
-import { Layout, BackTop, Row, Col, Image, List } from 'antd';
-import { UpCircleOutlined } from '@ant-design/icons';
+import { Layout, BackTop, Row, Col, Image, List, Button } from 'antd';
+import { UpCircleOutlined, CalendarOutlined } from '@ant-design/icons';
 const { Header, Footer, Content } = Layout;
 
 interface AppProps {
@@ -48,7 +48,31 @@ class App extends React.Component<AppProps, AppState> {
           </Header>
 
           <Content>
-            <Banner backgroundImage={Logo} odd />
+            <Banner odd>
+              <Row gutter={[24, 0]} style={{ height: '100vmin' }} justify="space-around" align="middle">
+                <Col span={12} style={{
+                  textAlign: 'center'
+                }}>
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <p className="text-4xl font-mono">Dogs for life</p>
+                  <p className="text-2xl font-mono">Your dog deserves the best.</p>
+                  <Button type="primary" icon={<CalendarOutlined />}>Book Now</Button>
+                </Col>
+                <Col span={12} style={{
+                  height: '100vmin',
+                  backgroundImage: `url(${Logo})`,
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: 'cover'
+                }} />
+              </Row>
+            </Banner>
             <Banner even style={{ height: '100vmin' }}>
               <Row gutter={[24, 0]} style={{ height: '100vmin' }} justify="space-around" align="middle">
                 <Col span={12} style={{
@@ -80,7 +104,7 @@ class App extends React.Component<AppProps, AppState> {
                   textAlign: 'center'
                 }}>
                   <p className="text-4xl font-mono">We love your pets as much as you do!</p>
-                  <p className="text-2xl font-mono">Give your loved one the best treatment.</p>
+                  <p className="text-2xl font-mono">Treat your best friend with a groom or massage, up their skills with a training session or get a tailoured nutrition plan.</p>
                 </Col>
                 <Col span={12} style={{
                   height: '100vmin',
