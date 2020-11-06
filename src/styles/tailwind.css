@@ -22747,14 +22747,25 @@ video {
 .Banner {
   height: 100vmin;
   background-repeat: no-repeat;
-  background-color: white;
-  background-position: center;
   background-size: contain;
 }
 
 .Banner.even {
   opacity: 0.7;
+  background-position: left;
   background-color: rgb(246, 181, 255);
+}
+
+.Banner.odd {
+  background-position: right;
+  opacity: 0.7;
+  background-color: white;
+}
+
+.Banner.odd {
+  background-position: right;
+  opacity: 0.7;
+  background-color: white;
 }
 
 .BackTop {

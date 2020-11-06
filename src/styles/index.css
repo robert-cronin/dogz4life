@@ -5,22 +5,34 @@
 .Banner {
     height: 100vmin;
     background-repeat: no-repeat;
-    background-color: white;
-    background-position: center;
     background-size: contain;
 }
+
 .Banner.even {
     opacity: 0.7;
+    background-position: left;
     background-color: rgb(246, 181, 255);
 }
 
+.Banner.odd {
+    background-position: right;
+    opacity: 0.7;
+    background-color: white;
+}
+
+.Banner.odd {
+    background-position: right;
+    opacity: 0.7;
+    background-color: white;
+}
+
 .BackTop {
-  height: 40;
-  width: 40;
-  line-height: '40px';
-  border-radius: 6;
-  background-color: '#1088e9';
-  color: '#fff';
-  text-align: 'center';
-  font-size: 14;
+    height: 40;
+    width: 40;
+    line-height: '40px';
+    border-radius: 6;
+    background-color: '#1088e9';
+    color: '#fff';
+    text-align: 'center';
+    font-size: 14;
 }
