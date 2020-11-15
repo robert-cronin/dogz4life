@@ -48,7 +48,7 @@ class Navigation extends React.Component {
           </Menu.Item>
           <SubMenu key="sub1" icon={<CustomerServiceFilled />} title="Services">
             <Menu.Item key="5" icon={<CustomerServiceFilled />}>Grooming</Menu.Item>
-            <Menu.Item key="6" icon={<CustomerServiceFilled />}>Therapy</Menu.Item>
+            <Menu.Item key="6" icon={<CustomerServiceFilled />}>Massage</Menu.Item>
             <Menu.Item key="7" icon={<CustomerServiceFilled />}>Training</Menu.Item>
             <Menu.Item key="8" icon={<CustomerServiceFilled />}>Nutrition</Menu.Item>
           </SubMenu>
