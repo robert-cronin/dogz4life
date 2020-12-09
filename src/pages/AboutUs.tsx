@@ -7,7 +7,7 @@ import { Layout, BackTop, Row, Col, Image, List, Button } from 'antd';
 import { UpCircleOutlined, CalendarOutlined } from '@ant-design/icons';
 const { Header, Footer, Content } = Layout;
 
-class NewClientPage extends React.Component {
+class AboutUs extends React.Component {
     state = {
         current: 0,
     };
@@ -122,4 +122,4 @@ class NewClientPage extends React.Component {
 }
 
 
-export default NewClientPage
+export default AboutUs

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.sq-wallet-unavailable {
+    text-align: center;
+}
+
 .Banner {
     height: 100vmin;
     background-repeat: no-repeat;
@@ -12,12 +16,6 @@
     opacity: 0.7;
     background-position: left;
     background-color: rgb(246, 181, 255);
-}
-
-.Banner.odd {
-    background-position: right;
-    opacity: 0.7;
-    background-color: white;
 }
 
 .Banner.odd {

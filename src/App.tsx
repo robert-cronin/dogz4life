@@ -7,10 +7,12 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
 } from "react-router-dom";
-import HomePage from './views/HomePage'
-import NewClientPage from './views/NewClientPage'
+import HomePage from './pages/HomePage'
+import NewClientPage from './pages/NewClientPage'
+import AboutUs from './pages/AboutUs';
+import PaymentForm from './components/PaymentForm';
+
 const { Header, Footer, Content } = Layout;
 
 interface AppProps {
@@ -43,11 +45,17 @@ class App extends React.Component<AppProps, AppState> {
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
+              <Route path="/home">
+                <HomePage />
+              </Route>
+              <Route path="/about">
+                <AboutUs />
+              </Route>
+              <Route path="/contact">
+                <PaymentForm />
+              </Route>
               <Route path="/client/new">
                 <NewClientPage />
-              </Route>
-              <Route path="/">
-                <HomePage />
               </Route>
             </Switch>
           </Content>
