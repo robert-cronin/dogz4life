@@ -8,29 +8,27 @@ import HomePage from "./pages/HomePage";
 import NewClientPage from "./pages/NewClientPage";
 import AboutUs from "./pages/AboutUs";
 import PaymentForm from "./components/PaymentForm";
-import ContactForm from "./components/contact-form/ContactForm";
+import ContactFormContent from "./components/contact-form/ContactFormContent";
+import ContactFormTitle from "./components/contact-form/ContactFormTitle";
 
 const { Header, Footer, Content } = Layout;
 
 interface AppProps {}
-interface AppState {
-}
+interface AppState {}
 
 class App extends React.Component<AppProps, AppState> {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
     return (
       <Router>
-        <Layout className="LayoutWindow">
-          <Affix offsetTop={0}>
+        <Layout className="layout-window">
             <Header className="navigation">
               <Navigation />
             </Header>
-          </Affix>
-          <Content>
+          <Content className="site-content">
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
@@ -43,18 +41,21 @@ class App extends React.Component<AppProps, AppState> {
               <Route path="/contact">
                 <PaymentForm />
               </Route>
-              <Route path="/client/new">
+              <Route path="/booking/new">
                 <NewClientPage />
               </Route>
             </Switch>
           </Content>
-          <Footer>Copyright ©2020 Dogz4Life. Created by FortyTwoApps.</Footer>
+
+          <Footer id="page-footer">
+            <span>Copyright ©2020 Dogz4Life. Created by FortyTwoApps.</span>
+          </Footer>
         </Layout>
         <div id="contact-popover">
           <Popover
             placement="bottomLeft"
-            title={<h1>Title</h1>}
-            content={<ContactForm />}
+            title={<ContactFormTitle />}
+            content={<ContactFormContent />}
             trigger="click"
           >
             <Avatar className="avatar" icon={<MessageOutlined />}></Avatar>

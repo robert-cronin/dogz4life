@@ -1,3 +1,32 @@
+* {
+  box-sizing: border-box !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+#root {
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #71bc52;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #599e3d;
+}
+
 .sq-wallet-unavailable {
   text-align: center;
 }
@@ -20,19 +49,8 @@
   background-color: #71bc52;
 }
 
-.BackTop {
-  height: 40;
-  width: 40;
-  line-height: "40px";
-  border-radius: 6;
-  background-color: "#1088e9";
-  color: "#fff";
-  text-align: "center";
-  font-size: 14;
-}
-
-.LayoutWindow {
-  min-height: 100vh;
+.layout-window {
+  height: 100%;
 }
 
 .NewClientFormCard {
@@ -40,24 +58,96 @@
   margin: 5px;
 }
 
-/* Front page */
 #contact-popover > .avatar {
   position: fixed;
-  bottom: 5vh;
-  left: 90vw;
+  z-index: 9998;
+  bottom: 20px;
+  right: 20px;
   background-color: #b462f1;
+  -webkit-box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
+  -moz-box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
+  box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
 }
 
 #contact-popover > .avatar:hover {
   cursor: pointer;
 }
 
-.navigation {
-  background-color: #b462f1;
+#contact-form {
+  z-index: 9999;
 }
 
-/* .navigation>a {
-    color: white;
-} */
+.ant-popover-title {
+  background-color: #b462f1 !important;
+}
+
+@media screen and (max-width: 600px) {
+  .ant-popover {
+    left: 0 !important;
+    top: 0 !important;
+    padding: 0 !important;
+    width: 100vw;
+    height: 100vh;
+    position: fixed !important;
+  }
+
+  #contact-form {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ant-popover-content,
+.ant-popover-inner {
+    height: inherit;
+  }
+}
+@media screen and (min-width: 601px) {
+  #contact-form {
+    width: 50vw;
+  }
+}
+.navigation {
+  background-color: #b462f1 !important;
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+}
+
+.navigation > .ant-menu-item-selected a,
+.navigation > .ant-menu-item-active a {
+  color: white !important;
+}
+
+.navigation > .ant-menu-item-selected,
+.navigation > .ant-menu-item-active {
+  color: white !important;
+  border-color: white !important;
+}
+
+.navigation > svg {
+  color: white !important;
+}
+
+#page-footer {
+  background-color: #b462f1 !important;
+  color: white !important;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+}
+
+.site-content {
+  padding-top: 64px;
+  padding-bottom: 60px;
+  overflow: scroll;
+  background-color: white !important;
+}
 
 /*# sourceMappingURL=index.css.map */

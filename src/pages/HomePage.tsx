@@ -53,8 +53,12 @@ class HomePage extends React.Component {
                         backgroundImage: `url(${Logo})`,
                         backgroundPosition: 'bottom',
                         backgroundRepeat: 'no-repeat',
-                        backgroundSize: 'cover'
+                        backgroundSize: 'cover',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-around'
                     }}>
+                        {[1,2,3,4,5,6,7,9,10,11,12,13].map(n => <h1>{n}</h1>)}
                     </Col>
                 </Row>
             </Banner>

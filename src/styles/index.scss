@@ -1,11 +1,58 @@
 // variables
 $primary-color: rgb(180, 98, 241);
+$primary-color-dark: darken($primary-color, 10%);
 $secondary-color: rgb(113, 188, 82);
+$secondary-color-dark: darken($secondary-color, 10%);
+// box-shadow
+$horizontal-length: 2px;
+$vertical-length: 2px;
+$blur-radius: 6px;
+$spread-radius: -1px;
+$shadow-color: rgba(0, 0, 0, 0.97);
+$box-shadow-opts: $horizontal-length $vertical-length $blur-radius $spread-radius $shadow-color;
 
+* {
+    box-sizing: border-box !important;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+#root {
+    height: 100%
+}
+
+//////////////////////
+// scrollbar styles //
+//////////////////////
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $secondary-color;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $secondary-color-dark;
+}
+
+////////////////////
+// Payment styles //
+////////////////////
 .sq-wallet-unavailable {
     text-align: center;
 }
 
+///////////////////
+// Banner styles //
+///////////////////
 .Banner {
     height: 100vmin;
     background-repeat: no-repeat;
@@ -24,19 +71,8 @@ $secondary-color: rgb(113, 188, 82);
     background-color: $secondary-color;
 }
 
-.BackTop {
-    height: 40;
-    width: 40;
-    line-height: '40px';
-    border-radius: 6;
-    background-color: '#1088e9';
-    color: '#fff';
-    text-align: 'center';
-    font-size: 14;
-}
-
-.LayoutWindow {
-    min-height: 100vh;
+.layout-window {
+    height: 100%;
 }
 
 .NewClientFormCard {
@@ -44,22 +80,106 @@ $secondary-color: rgb(113, 188, 82);
     margin: 5px;
 }
 
-/* Front page */
+//////////////////
+// Contact Form //
+//////////////////
 #contact-popover>.avatar {
     position: fixed;
-    bottom: 5vh;
-    left: 90vw;
+    z-index: 9998;
+    bottom: 20px;
+    right: 20px;
     background-color: $primary-color;
+    -webkit-box-shadow: $box-shadow-opts;
+    -moz-box-shadow: $box-shadow-opts;
+    box-shadow: $box-shadow-opts;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    font-size: 30px;
+    align-items: center;
+    justify-content: center;
 }
 
 #contact-popover>.avatar:hover {
     cursor: pointer;
 }
 
-.navigation {
-    background-color: $primary-color;
+#contact-form {
+    z-index: 9999;
 }
 
-/* .navigation>a {
-    color: white;
-} */
+.ant-popover-title {
+    background-color: $primary-color !important;
+}
+
+@media screen and (max-width: 600px) {
+    .ant-popover {
+        left: 0 !important;
+        top: 0 !important;
+        padding: 0 !important;
+        width: 100vw;
+        height: 100vh;
+        position: fixed !important;
+    }
+
+    #contact-form {
+        width: 100%;
+        height: 100%;
+    }
+
+    .ant-popover-content,
+    .ant-popover-inner {
+        height: inherit;
+    }
+}
+
+@media screen and (min-width: 601px) {
+    #contact-form {
+        width: 50vw;
+    }
+}
+
+////////////////
+// Navigation //
+////////////////
+.navigation {
+    background-color: $primary-color !important;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+}
+
+.navigation>.ant-menu-item-selected a,
+.navigation>.ant-menu-item-active a {
+    color: white !important;
+}
+
+.navigation>.ant-menu-item-selected,
+.navigation>.ant-menu-item-active {
+    color: white !important;
+    border-color: white !important;
+}
+
+.navigation>svg {
+    color: white !important;
+}
+
+// Footer
+#page-footer {
+    background-color: $primary-color !important;
+    color: white !important;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+}
+
+//////////////////
+// Site Content //
+//////////////////
+.site-content {
+    padding-top: 64px;
+    padding-bottom: 60px;
+    overflow: scroll;
+    background-color: white !important;
+}
