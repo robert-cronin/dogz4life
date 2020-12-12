@@ -1,6 +1,6 @@
 import React from 'react'
 import Banner from '../components/Banner';
-import Logo from '../static/dogz4lifelogo.jpg'
+import Logo from '../static/only-tree-background.jpg'
 import Bella from '../static/bella.jpg'
 import Benni from '../static/benni-silly.jpg'
 import { Layout, BackTop, Row, Col, Image, List, Button } from 'antd';
@@ -51,11 +51,10 @@ class HomePage extends React.Component {
                     <Col span={24} style={{
                         height: '100vmin',
                         backgroundImage: `url(${Logo})`,
-                        backgroundPosition: 'center',
+                        backgroundPosition: 'bottom',
                         backgroundRepeat: 'no-repeat',
                         backgroundSize: 'cover'
                     }}>
-                        hgvhyg
                     </Col>
                 </Row>
             </Banner>

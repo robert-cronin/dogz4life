@@ -43,3 +43,15 @@
     height: 100%;
     margin: 5px;
 }
+
+/* Front page */
+#contact-popover>.avatar {
+    position: fixed;
+    bottom: 5vh;
+    left: 90vw;
+    background-color: lightgreen;
+}
+
+#contact-popover>.avatar:hover {
+    cursor: pointer;
+}
