@@ -22,9 +22,25 @@ class ContactFormContent extends React.Component<any, ContactFormState> {
     this.setState({ name: e.target.value });
   }
 
+  handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ email: e.target.value });
+  }
+
+  handleMessageChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    this.setState({ message: e.target.value });
+  }
+
   render() {
     return (
-      <Form id="contact-form" layout="vertical">
+      <Form
+        id="contact-form"
+        layout="vertical"
+        style={{
+          borderColor: "darkblue",
+          margin: "10px",
+          borderWidth: "10px",
+        }}
+      >
         <Form.Item label="Name">
           <Input
             onChange={(e) => this.handleNameChange(e)}
@@ -32,8 +48,23 @@ class ContactFormContent extends React.Component<any, ContactFormState> {
             placeholder="Enter Your Name"
           />
         </Form.Item>
-        <Form.Item style={{display: "flex"}}>
-          <Button htmlType="submit" style={{alignSelf: "center"}}>SEND</Button>
+        <Form.Item label="Email">
+          <Input
+            onChange={(e) => this.handleEmailChange(e)}
+            value={this.state.email}
+            placeholder="Enter Your Email Address"
+          />
+        </Form.Item>
+        <Form.Item label="Message">
+          <Input.TextArea
+            onChange={(e) => this.handleMessageChange(e)}
+            value={this.state.message}
+            placeholder="Enter Your Message"
+            rows={10}
+          />
+        </Form.Item>
+        <Form.Item style={{ display: "flex", justifyContent: "center" }}>
+          <Button htmlType="submit">SEND</Button>
         </Form.Item>
       </Form>
     );

@@ -13,6 +13,7 @@ body {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
+  z-index: 9999;
 }
 
 ::-webkit-scrollbar-track {
@@ -20,11 +21,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #71bc52;
+  background: #599e3d;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #599e3d;
+  background: #45792f;
 }
 
 .sq-wallet-unavailable {
@@ -53,14 +54,13 @@ body {
   height: 100%;
 }
 
-.NewClientFormCard {
-  height: 100%;
+.new-client-form-card {
   margin: 5px;
 }
 
 #contact-popover > .avatar {
   position: fixed;
-  z-index: 9998;
+  z-index: 9997;
   bottom: 20px;
   right: 20px;
   background-color: #b462f1;
@@ -80,7 +80,7 @@ body {
 }
 
 #contact-form {
-  z-index: 9999;
+  z-index: 9998;
 }
 
 .ant-popover-title {
@@ -148,6 +148,122 @@ body {
   padding-bottom: 60px;
   overflow: scroll;
   background-color: white !important;
+}
+
+.home-page {
+  width: 98%;
+  margin: 5px;
+}
+
+.home-page > h1 {
+  font-size: 40px;
+  text-align: center;
+  margin-bottom: 0;
+  color: #71bc52;
+}
+
+.home-page > h2 {
+  font-size: 20px;
+  text-align: center;
+  color: #b462f1;
+}
+
+.home-page > img {
+  width: 100%;
+  -webkit-box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
+  -moz-box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
+  box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
+}
+
+.home-page > .action-banner {
+  background-color: #71bc52;
+  margin-top: 5px;
+  margin-left: -5px;
+  padding-left: 5px;
+  margin-right: -5px;
+  padding-right: 5px;
+  height: 200px;
+}
+
+#animated-leaf-1 {
+  width: 20px;
+  height: 20px;
+  color: #b462f1;
+  animation: leaf-animation-1 5s infinite;
+  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
+}
+
+@keyframes leaf-animation-1 {
+  from {
+    position: absolute;
+    top: 649px;
+    left: -10px;
+  }
+  to {
+    position: absolute;
+    top: 555px;
+    left: 105vw;
+  }
+}
+#animated-leaf-2 {
+  width: 20px;
+  height: 20px;
+  color: #b462f1;
+  animation: leaf-animation-2 5s infinite;
+  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
+}
+
+@keyframes leaf-animation-2 {
+  from {
+    position: absolute;
+    top: 608px;
+    left: -10px;
+  }
+  to {
+    position: absolute;
+    top: 571px;
+    left: 105vw;
+  }
+}
+#animated-leaf-3 {
+  width: 20px;
+  height: 20px;
+  color: #b462f1;
+  animation: leaf-animation-3 5s infinite;
+  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
+}
+
+@keyframes leaf-animation-3 {
+  from {
+    position: absolute;
+    top: 513px;
+    left: -10px;
+  }
+  to {
+    position: absolute;
+    top: 545px;
+    left: 105vw;
+  }
+}
+#animated-leaf-4 {
+  width: 20px;
+  height: 20px;
+  color: #b462f1;
+  animation: leaf-animation-4 5s infinite;
+  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
+}
+
+@keyframes leaf-animation-4 {
+  from {
+    position: absolute;
+    top: 530px;
+    left: -10px;
+  }
+  to {
+    position: absolute;
+    top: 620px;
+    left: 105vw;
+  }
 }
 
 /*# sourceMappingURL=index.css.map */

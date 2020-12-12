@@ -43,7 +43,7 @@ class NewClientPage extends React.Component {
 
   render() {
     return (
-      <Card title="New Client Form" className="NewClientFormCard">
+      <Card title="New Client Form" className="new-client-form-card">
         <Form
           name="basic"
           layout="vertical"

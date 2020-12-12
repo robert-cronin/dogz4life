@@ -1,170 +1,187 @@
-import React from 'react'
-import { Form, Input, InputNumber, Checkbox, Select, DatePicker, Switch, Row, Col } from 'antd';
+import React from "react";
+import {
+  Form,
+  Input,
+  InputNumber,
+  Checkbox,
+  Select,
+  DatePicker,
+  Switch,
+  Row,
+  Col,
+} from "antd";
 const { Option } = Select;
 
 class NewClientInfo extends React.Component {
-    render() {
-        return (<>
-            <Row gutter={50}>
-                <Col span={12}>
-                    <Form.Item
-                        label="Pet Name"
-                        name="petname"
-                        rules={[{ required: true, message: 'Please input your pets name' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Pet Type"
-                        name="pettype"
-                        rules={[{ required: true, message: 'Please select your pets type' }]}
-                    >
-                        <Select placeholder="Select Type">
-                            <Option value="Dog">Dog</Option>
-                            <Option value="Cat">Cat</Option>
-                            <Option value="Other">Other</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Pet Gender"
-                        name="petgender"
-                        rules={[{ required: true, message: 'Please select your pets gender' }]}
-                    >
-                        <Select placeholder="Select Gender">
-                            <Option value="Male">Male</Option>
-                            <Option value="Female">Female</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Is she/he Sprayed or Neutered?"
-                        name="sprayed"
-                    >
-                        <Switch />
-                    </Form.Item>
-                    <Form.Item
-                        label="Weight"
-                        name="weight"
-                    >
-                        <InputNumber /> kg
-                    </Form.Item>
-                    <Form.Item
-                        label="Coat Color"
-                        name="coatcolor"
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Birthday"
-                        name="birthday"
-                    >
-                        <DatePicker />
-                    </Form.Item>
-                    <Form.Item
-                        label="Allergies"
-                        name="allergies"
-                    >
-                        <Input.TextArea rows={7} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Additional Notes"
-                        name="additionalnotes"
-                    >
-                        <Input.TextArea rows={7} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Vaccination Record"
-                        name="vaccinationrecord"
-                    >
-                        <Select placeholder="Select Type">
-                            <Option value="Rabies">Rabies</Option>
-                            <Option value="Bordetella">Bordetella</Option>
-                            <Option value="Leptospirosis">Leptospirosis</Option>
-                            <Option value="CanineC3">Canine C3</Option>
-                            <Option value="CanineC4">Canine C4</Option>
-                            <Option value="CanineC5">Canine C5</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item
-                        label="Date Administered"
-                        name="vaccinedateadministered"
-                    >
-                        <DatePicker />
-                    </Form.Item>
-                    <Form.Item
-                        label="Next Due"
-                        name="vaccinenextdue"
-                    >
-                        <DatePicker />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        label="Health Flags"
-                        name="healthflags"
-                    >
-                        <Checkbox.Group>
-                            {[
-                                ["Allergies", "Hip Dysplasia"],
-                                ["Anal Gland Issue", "Hot Spots"],
-                                ["Arthritis", "Incontinence"],
-                                ["Blind / Poor Vision", "Kidney Disease"],
-                                ["Collapsing Trachea", "Moles & Warts"],
-                                ["Deaf / Poor Hearing", "Pancreatitis"],
-                                ["Diabetic", "Prone to Ear Infections"],
-                                ["Difficulty Standing", "Sensitive Skin"],
-                                ["Epileptic", "Tooth Decay"],
-                                ["Heart Problems", "Tumors / Cysts"],
-                            ].map(o => {
-                                return (
-                                    <Row justify="space-around" gutter={50}>
-                                        <Col span={12}>
-                                            <Checkbox value={o[0]} style={{ width: 200 }}>{o[0]}</Checkbox>
-                                        </Col>
-                                        <Col span={12}>
-                                            <Checkbox value={o[1]} style={{ width: 200 }}>{o[1]}</Checkbox>
-                                        </Col>
-                                    </Row>
-                                )
-                            })}
-                        </Checkbox.Group>
-                    </Form.Item>
-                    <Form.Item
-                        label="Health Flags"
-                        name="healthflags"
-                    >
-                        <Checkbox.Group>
-                            {[
-                                ["Anxiety", "No Perfumes"],
-                                ["Cage Aggressive", "No Public Photos"],
-                                ["Fear Of Clippers", "Potential Aggression w/Animals"],
-                                ["Fear Of Dryer", "Potential Aggression w/People"],
-                                ["Fear Of Nail Clipping", "Prone to clipper burn"],
-                                ["Fear Of Water", "Senior Pet"],
-                                ["Heavy Shedding", "Table / Kennel Diver"],
-                                ["Hernia", "Team Lift"],
-                                ["High Energy", "Tends to chew"],
-                                ["History of Biting", "Timid / Shy"],
-                                ["Leash Required", "Vocal / Barker"],
-                                ["Nervous Soiler", ""],
-                            ].map(o => {
-                                return (
-                                    <Row justify="space-around" gutter={50}>
-                                        <Col span={12}>
-                                            <Checkbox value={o[0]} style={{ width: 200 }}>{o[0]}</Checkbox>
-                                        </Col>
-                                        <Col span={12}>
-                                            <Checkbox value={o[1]} style={{ width: 200 }}>{o[1]}</Checkbox>
-                                        </Col>
-                                    </Row>
-                                )
-                            })}
-                        </Checkbox.Group>
-                    </Form.Item>
-                </Col>
-            </Row>
-        </>);
-    }
+  render() {
+    return (
+      <>
+        <Row gutter={50}>
+          <Col span={12}>
+            <Form.Item
+              label="Pet Name"
+              name="petname"
+              rules={[
+                { required: true, message: "Please input your pets name" },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Pet Type"
+              name="pettype"
+              rules={[
+                { required: true, message: "Please select your pets type" },
+              ]}
+            >
+              <Select placeholder="Select Type">
+                <Option value="Dog">Dog</Option>
+                <Option value="Cat">Cat</Option>
+                <Option value="Other">Other</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Pet Gender"
+              name="petgender"
+              rules={[
+                { required: true, message: "Please select your pets gender" },
+              ]}
+            >
+              <Select placeholder="Select Gender">
+                <Option value="Male">Male</Option>
+                <Option value="Female">Female</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="Is she/he Sprayed or Neutered?" name="sprayed">
+              <Switch />
+            </Form.Item>
+            <Form.Item label="Weight" name="weight">
+              <InputNumber /> kg
+            </Form.Item>
+            <Form.Item label="Coat Color" name="coatcolor">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Birthday" name="birthday">
+              <DatePicker />
+            </Form.Item>
+            <Form.Item label="Allergies" name="allergies">
+              <Input.TextArea rows={7} />
+            </Form.Item>
+            <Form.Item label="Additional Notes" name="additionalnotes">
+              <Input.TextArea rows={7} />
+            </Form.Item>
+            <Form.Item label="Vaccination Record" name="vaccinationrecord">
+              <Select placeholder="Select Type">
+                <Option value="Rabies">Rabies</Option>
+                <Option value="Bordetella">Bordetella</Option>
+                <Option value="Leptospirosis">Leptospirosis</Option>
+                <Option value="CanineC3">Canine C3</Option>
+                <Option value="CanineC4">Canine C4</Option>
+                <Option value="CanineC5">Canine C5</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="Date Administered" name="vaccinedateadministered">
+              <DatePicker />
+            </Form.Item>
+            <Form.Item label="Next Due" name="vaccinenextdue">
+              <DatePicker />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Health Flags" name="healthflags">
+              <Checkbox.Group>
+                <div
+                  style={{
+                    display: "flex",
+                    flexFlow: "row wrap",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  {[
+                    "Allergies",
+                    "Hip Dysplasia",
+                    "Anal Gland Issue",
+                    "Hot Spots",
+                    "Arthritis",
+                    "Incontinence",
+                    "Blind / Poor Vision",
+                    "Kidney Disease",
+                    "Collapsing Trachea",
+                    "Moles & Warts",
+                    "Deaf / Poor Hearing",
+                    "Pancreatitis",
+                    "Diabetic",
+                    "Prone to Ear Infections",
+                    "Difficulty Standing",
+                    "Sensitive Skin",
+                    "Epileptic",
+                    "Tooth Decay",
+                    "Heart Problems",
+                    "Tumors / Cysts",
+                  ].map((opt) => {
+                    return (
+                      <Checkbox value={opt} style={{
+                          width: '200px',
+                          marginLeft: '5px'
+                      }}>
+                        {opt}
+                      </Checkbox>
+                    );
+                  })}
+                </div>
+              </Checkbox.Group>
+            </Form.Item>
+            <Form.Item label="Health Flags" name="healthflags">
+              <Checkbox.Group>
+                <div
+                  style={{
+                    display: "flex",
+                    flexFlow: "row wrap",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  {[
+                    "Anxiety",
+                    "No Perfumes",
+                    "Cage Aggressive",
+                    "No Public Photos",
+                    "Fear Of Clippers",
+                    "Potential Aggression w/Animals",
+                    "Fear Of Dryer",
+                    "Potential Aggression w/People",
+                    "Fear Of Nail Clipping",
+                    "Prone to clipper burn",
+                    "Fear Of Water",
+                    "Senior Pet",
+                    "Heavy Shedding",
+                    "Table / Kennel Diver",
+                    "Hernia",
+                    "Team Lift",
+                    "High Energy",
+                    "Tends to chew",
+                    "History of Biting",
+                    "Timid / Shy",
+                    "Leash Required",
+                    "Vocal / Barker",
+                    "Nervous Soiler",
+                  ].map((opt) => {
+                    return (
+                        <Checkbox value={opt} style={{
+                            minWidth: '250px',
+                            marginLeft: '5px'
+                        }}>
+                          {opt}
+                        </Checkbox>
+                    );
+                  })}
+                </div>
+              </Checkbox.Group>
+            </Form.Item>
+          </Col>
+        </Row>
+      </>
+    );
+  }
 }
 
-
-export default NewClientInfo
+export default NewClientInfo;

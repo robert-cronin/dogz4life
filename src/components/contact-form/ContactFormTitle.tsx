@@ -22,8 +22,9 @@ class ContactFormTitle extends React.Component<any, ContactFormState> {
           width: "100%",
         }}
       >
-        <h1>Contact Us</h1>
-        <Button type="link" icon={<CloseOutlined />} />
+        <h1 style={{
+          color: 'white'
+        }}>Contact Us</h1>
       </div>
     );
   }

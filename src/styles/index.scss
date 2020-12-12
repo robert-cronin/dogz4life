@@ -1,8 +1,10 @@
 // variables
 $primary-color: rgb(180, 98, 241);
 $primary-color-dark: darken($primary-color, 10%);
+$primary-color-darker: darken($primary-color-dark, 10%);
 $secondary-color: rgb(113, 188, 82);
 $secondary-color-dark: darken($secondary-color, 10%);
+$secondary-color-darker: darken($secondary-color-dark, 10%);
 // box-shadow
 $horizontal-length: 2px;
 $vertical-length: 2px;
@@ -20,7 +22,7 @@ body {
 }
 
 #root {
-    height: 100%
+    height: 100%;
 }
 
 //////////////////////
@@ -29,6 +31,7 @@ body {
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
+    z-index: 9999;
 }
 
 ::-webkit-scrollbar-track {
@@ -36,11 +39,11 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: $secondary-color;
+    background: $secondary-color-dark;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: $secondary-color-dark;
+    background: $secondary-color-darker;
 }
 
 ////////////////////
@@ -75,8 +78,7 @@ body {
     height: 100%;
 }
 
-.NewClientFormCard {
-    height: 100%;
+.new-client-form-card {
     margin: 5px;
 }
 
@@ -85,7 +87,7 @@ body {
 //////////////////
 #contact-popover>.avatar {
     position: fixed;
-    z-index: 9998;
+    z-index: 9997;
     bottom: 20px;
     right: 20px;
     background-color: $primary-color;
@@ -105,7 +107,7 @@ body {
 }
 
 #contact-form {
-    z-index: 9999;
+    z-index: 9998;
 }
 
 .ant-popover-title {
@@ -182,4 +184,69 @@ body {
     padding-bottom: 60px;
     overflow: scroll;
     background-color: white !important;
+}
+
+///////////////
+// Home Page //
+///////////////
+.home-page {
+    width: 98%;
+    margin: 5px;
+}
+
+.home-page>h1 {
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 0;
+    color: $secondary-color;
+}
+
+.home-page>h2 {
+    font-size: 20px;
+    text-align: center;
+    color: $primary-color;
+}
+
+.home-page>img {
+    width: 100%;
+    -webkit-box-shadow: $box-shadow-opts;
+    -moz-box-shadow: $box-shadow-opts;
+    box-shadow: $box-shadow-opts;
+}
+
+.home-page>.action-banner {
+    background-color: $secondary-color;
+    margin-top: 5px;
+    margin-left: -5px;
+    padding-left: 5px;
+    margin-right: -5px;
+    padding-right: 5px;
+    height: 200px;
+}
+
+////////////////////
+// Leaf Animation //
+////////////////////
+@for $i from 1 through 4 {
+    #animated-leaf-#{$i} {
+        width: 20px;
+        height: 20px;
+        color: $primary-color;
+        animation: leaf-animation-#{$i} 5s infinite;
+        transition-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+    }
+
+    @keyframes leaf-animation-#{$i} {
+        from {
+            position: absolute;
+            top: random($limit: (150)) + 500 + px;
+            left: -10px;
+        }
+
+        to {
+            position: absolute;
+            top: random($limit: (150)) + 500 + px;
+            left: 105vw;
+        }
+    }
 }
