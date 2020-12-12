@@ -18,33 +18,33 @@ class Navigation extends React.Component {
         defaultSelectedKeys={['/home']}
         defaultOpenKeys={['services']}
         mode="horizontal"
-        theme="dark"
         multiple={false}
+        className="navigation"
       >
-        <Menu.Item key="/home" icon={<HomeFilled />}>
-          <Link to="/home">Home</Link>
+        <Menu.Item color="white" key="/home" icon={<HomeFilled />}>
+          <Link color="white" to="/home">Home</Link>
         </Menu.Item>
         <Menu.Item key="/about" icon={<InfoCircleFilled />}>
-          <Link to="/about">About Us</Link>
+          <Link to="/about"><span>About Us</span></Link>
         </Menu.Item>
         <Menu.Item key="/contact" icon={<PhoneFilled />}>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact"><span>Contact</span></Link>
         </Menu.Item>
         <Menu.Item key="/booking/new" icon={<CalendarFilled />}>
-          <Link to="/booking/new">Book</Link>
+          <Link to="/booking/new"><span>Book</span></Link>
         </Menu.Item>
         <SubMenu key="services" icon={<CustomerServiceFilled />} title="Services">
           <Menu.Item key="/about/grooming" icon={<CustomerServiceFilled />}>
-            <Link to="/about/grooming">Grooming</Link>
+            <Link to="/about/grooming"><span>Grooming</span></Link>
           </Menu.Item>
           <Menu.Item key="/about/massage" icon={<CustomerServiceFilled />}>
-            <Link to="/about/massage">Massage</Link>
+            <Link to="/about/massage"><span>Massage</span></Link>
           </Menu.Item>
           <Menu.Item key="/about/training" icon={<CustomerServiceFilled />}>
-            <Link to="/about/training">Training</Link>
+            <Link to="/about/training"><span>Training</span></Link>
           </Menu.Item>
           <Menu.Item key="/about/nutrition" icon={<CustomerServiceFilled />}>
-            <Link to="/about/nutrition">Nutrition</Link>
+            <Link to="/about/nutrition"><span>Nutrition</span></Link>
           </Menu.Item>
         </SubMenu>
       </Menu>

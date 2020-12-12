@@ -26,7 +26,7 @@ class App extends React.Component<AppProps, AppState> {
       <Router>
         <Layout className="LayoutWindow">
           <Affix offsetTop={0}>
-            <Header>
+            <Header className="navigation">
               <Navigation />
             </Header>
           </Affix>
