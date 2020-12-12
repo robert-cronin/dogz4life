@@ -33,7 +33,7 @@ body {
 }
 
 .Banner {
-  height: 100vmin;
+  height: 93.5vmin;
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -196,12 +196,12 @@ body {
 @keyframes leaf-animation-1 {
   from {
     position: absolute;
-    top: 649px;
+    top: 524px;
     left: -10px;
   }
   to {
     position: absolute;
-    top: 555px;
+    top: 634px;
     left: 105vw;
   }
 }
@@ -216,12 +216,12 @@ body {
 @keyframes leaf-animation-2 {
   from {
     position: absolute;
-    top: 608px;
+    top: 577px;
     left: -10px;
   }
   to {
     position: absolute;
-    top: 571px;
+    top: 645px;
     left: 105vw;
   }
 }
@@ -236,12 +236,12 @@ body {
 @keyframes leaf-animation-3 {
   from {
     position: absolute;
-    top: 513px;
+    top: 531px;
     left: -10px;
   }
   to {
     position: absolute;
-    top: 545px;
+    top: 592px;
     left: 105vw;
   }
 }
@@ -256,12 +256,12 @@ body {
 @keyframes leaf-animation-4 {
   from {
     position: absolute;
-    top: 530px;
+    top: 604px;
     left: -10px;
   }
   to {
     position: absolute;
-    top: 620px;
+    top: 549px;
     left: 105vw;
   }
 }
