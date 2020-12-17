@@ -3,7 +3,7 @@ import Navigation from "./components/Navigation";
 import DocumentTitle from "react-document-title";
 import { Layout, Popover, Avatar, Button, Affix } from "antd";
 import { MessageOutlined, CloseOutlined } from "@ant-design/icons";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import NewClientPage from "./pages/NewClientPage";
 import AboutUs from "./pages/AboutUs";

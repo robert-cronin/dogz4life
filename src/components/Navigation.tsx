@@ -7,16 +7,16 @@ import {
   PhoneFilled,
   CustomerServiceFilled,
 } from '@ant-design/icons';
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 const { SubMenu } = Menu;
 
-class Navigation extends React.Component {
+class Navigation extends React.Component<any, any> {
   render() {
+    console.log(this.props.location.pathname)
     return (
       <Menu
-        defaultSelectedKeys={['/home']}
-        defaultOpenKeys={['services']}
+        selectedKeys={[this.props.location.pathname]}
         mode="horizontal"
         multiple={false}
         className="navigation"
@@ -53,4 +53,4 @@ class Navigation extends React.Component {
 }
 
 
-export default Navigation
+export default withRouter(props => <Navigation {...props} />)
