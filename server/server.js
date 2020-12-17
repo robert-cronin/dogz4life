@@ -24,27 +24,11 @@ async function main() {
     );
 
     // serve static resources
-    app.use('/', express.static(path.join(__dirname, "..", "build")));
+    app.use(express.static(path.join(__dirname, "..", "build")));
 
-
-    // react routes
-    const reactRoutes = [
-        "/",
-        "/home",
-        "/about",
-        "/contact",
-        "/booking/new",
-        "/about/grooming",
-        "/about/massage",
-        "/about/training",
-        "/about/nutrition",
-    ];
-
-    for (const route of reactRoutes) {
-        app.get(route, (req, res) => {
-            res.sendFile(path.join(__dirname, "..", "build", "index.html"));
-        });
-    }
+    app.get('/', (req, res) => {
+        res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+    });
 
     const httpServer = http.createServer(app);
     httpServer.listen(8080, "0.0.0.0");

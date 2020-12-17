@@ -1,9 +1,15 @@
 import React from "react";
-import Navigation from "./components/Navigation";
+import Navigation from "./components/menu/Navigation";
 import DocumentTitle from "react-document-title";
-import { Layout, Popover, Avatar, Button, Affix } from "antd";
+import { Layout, Popover, Avatar, Button, Affix, Result } from "antd";
 import { MessageOutlined, CloseOutlined } from "@ant-design/icons";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+  Link,
+} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import NewClientPage from "./pages/NewClientPage";
 import AboutUs from "./pages/AboutUs";
@@ -37,6 +43,9 @@ class App extends React.Component<AppProps, AppState> {
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
+              <Route exact path="/">
+                <Redirect push to="/home" />
+              </Route>
               <Route path="/home">
                 <HomePage />
               </Route>
@@ -48,6 +57,14 @@ class App extends React.Component<AppProps, AppState> {
               </Route>
               <Route path="/booking/new">
                 <NewClientPage />
+              </Route>
+              <Route path="*">
+                <Result
+                  status="404"
+                  title="404"
+                  subTitle="Sorry, the page you visited does not exist."
+                  extra={<Button type="primary"><Link to="/home">Back Home</Link></Button>}
+                />
               </Route>
             </Switch>
           </Content>

@@ -112,6 +112,13 @@ body {
     width: 50vw;
   }
 }
+.menu-button {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
 .navigation {
   background-color: #b462f1 !important;
   position: fixed;
@@ -177,93 +184,15 @@ body {
 
 .home-page > .action-banner {
   background-color: #71bc52;
-  margin-top: 5px;
-  margin-left: -5px;
-  padding-left: 5px;
-  margin-right: -5px;
-  padding-right: 5px;
+  margin-top: 10px;
+  margin-left: -10px;
+  padding-left: 10px;
+  margin-right: -10px;
+  padding-right: 10px;
   height: 200px;
-}
-
-#animated-leaf-1 {
-  width: 20px;
-  height: 20px;
-  color: #b462f1;
-  animation: leaf-animation-1 5s infinite;
-  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
-}
-
-@keyframes leaf-animation-1 {
-  from {
-    position: absolute;
-    top: 524px;
-    left: -10px;
-  }
-  to {
-    position: absolute;
-    top: 634px;
-    left: 105vw;
-  }
-}
-#animated-leaf-2 {
-  width: 20px;
-  height: 20px;
-  color: #b462f1;
-  animation: leaf-animation-2 5s infinite;
-  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
-}
-
-@keyframes leaf-animation-2 {
-  from {
-    position: absolute;
-    top: 577px;
-    left: -10px;
-  }
-  to {
-    position: absolute;
-    top: 645px;
-    left: 105vw;
-  }
-}
-#animated-leaf-3 {
-  width: 20px;
-  height: 20px;
-  color: #b462f1;
-  animation: leaf-animation-3 5s infinite;
-  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
-}
-
-@keyframes leaf-animation-3 {
-  from {
-    position: absolute;
-    top: 531px;
-    left: -10px;
-  }
-  to {
-    position: absolute;
-    top: 592px;
-    left: 105vw;
-  }
-}
-#animated-leaf-4 {
-  width: 20px;
-  height: 20px;
-  color: #b462f1;
-  animation: leaf-animation-4 5s infinite;
-  transition-timing-function: cubic-bezier(0.1, 0.7, 1, 0.1);
-}
-
-@keyframes leaf-animation-4 {
-  from {
-    position: absolute;
-    top: 604px;
-    left: -10px;
-  }
-  to {
-    position: absolute;
-    top: 549px;
-    left: 105vw;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /*# sourceMappingURL=index.css.map */

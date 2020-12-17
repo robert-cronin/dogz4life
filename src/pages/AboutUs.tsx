@@ -103,7 +103,7 @@ class AboutUs extends React.Component {
               style={{
                 height: "100%",
                 backgroundImage: `url(${Bella})`,
-                backgroundPosition: "right",
+                backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
               }}

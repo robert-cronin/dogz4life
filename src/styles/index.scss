@@ -144,6 +144,15 @@ body {
 ////////////////
 // Navigation //
 ////////////////
+// menu buttons
+.menu-button {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+
 .navigation {
     background-color: $primary-color !important;
     position: fixed;
@@ -214,39 +223,17 @@ body {
     box-shadow: $box-shadow-opts;
 }
 
+$action-banner-overflow: 10;
+
 .home-page>.action-banner {
     background-color: $secondary-color;
-    margin-top: 5px;
-    margin-left: -5px;
-    padding-left: 5px;
-    margin-right: -5px;
-    padding-right: 5px;
+    margin-top: $action-banner-overflow + px;
+    margin-left: -$action-banner-overflow + px;
+    padding-left: $action-banner-overflow + px;
+    margin-right: -$action-banner-overflow + px;
+    padding-right: $action-banner-overflow + px;
     height: 200px;
-}
-
-////////////////////
-// Leaf Animation //
-////////////////////
-@for $i from 1 through 4 {
-    #animated-leaf-#{$i} {
-        width: 20px;
-        height: 20px;
-        color: $primary-color;
-        animation: leaf-animation-#{$i} 5s infinite;
-        transition-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
-    }
-
-    @keyframes leaf-animation-#{$i} {
-        from {
-            position: absolute;
-            top: random($limit: (150)) + 500 + px;
-            left: -10px;
-        }
-
-        to {
-            position: absolute;
-            top: random($limit: (150)) + 500 + px;
-            left: 105vw;
-        }
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

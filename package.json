@@ -47,7 +47,7 @@
     },
     "scripts": {
         "dev": "concurrently \"npm run run:*\"",
-        "run:server": "node ./src/server/Server.ts",
+        "run:server": "node ./server/server.js",
         "run:app": "react-scripts start",
         "run:style": "sass --watch src/styles:public",
         "build": "react-scripts build",

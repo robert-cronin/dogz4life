@@ -53,12 +53,13 @@ class HomePage extends React.Component {
             <span>FOR THE LOVE OF DOGZ</span>
           </h2>
           <img src={Logo} />
-          <div className="action-banner">some text</div>
-        </div>
-        <div>
-          <img src={Leaf} id="animated-leaf-1" />
-          <img src={Leaf} id="animated-leaf-2" />
-          <img src={Leaf} id="animated-leaf-3" />
+          <div className="action-banner">
+            <Button type="primary">Book Now!</Button>
+          </div>
+          <div className="social-banner">
+            <h1>Follow Dogz4Life!</h1>
+            <Button type="primary">Book Now!</Button>
+          </div>
         </div>
       </>
     );
