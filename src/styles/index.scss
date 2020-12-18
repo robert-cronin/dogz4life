@@ -150,9 +150,96 @@ body {
     flex-wrap: nowrap;
     justify-content: center;
     align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 100%;
 }
 
+.menu-button .selected {}
 
+.nav-menu-container {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+@keyframes nav-appear {
+    to {
+        left: 0;
+    }
+}
+
+@keyframes nav-disappear {
+    to {
+        left: -100vh;
+    }
+
+}
+
+#open-button {
+    color: white;
+    align-self: center;
+}
+
+@media screen and (max-width: 600px) {
+    .nav-menu-container {
+        position: fixed;
+        left: -100vw;
+        height: 100vh;
+        width: 100vw;
+        flex-direction: column;
+        background-color: white;
+        overflow-y: scroll;
+    }
+
+    .nav-open {
+        animation-name: nav-appear;
+        animation-fill-mode: forwards;
+        animation-duration: 0.2s;
+    }
+
+    .nav-closed {
+        animation-name: nav-disappear;
+        animation-fill-mode: forwards !important;
+        animation-duration: 0.5s;
+    }
+
+    #open-button {
+        position: absolute;
+        left: 5px;
+        top: 5px;
+    }
+
+    #close-button {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+
+    .menu-button:hover {
+        background-color: $primary-color;
+    }
+}
+
+@media screen and (min-width: 601px) {
+    .nav-menu-container {
+        flex-direction: row;
+    }
+
+    .nav-menu-container>#close-button {
+        display: none;
+    }
+
+    .menu-button:hover {
+        background-color: white;
+    }
+
+    #open-button {
+        display: none;
+    }
+}
+
+// outdated
 .navigation {
     background-color: $primary-color !important;
     position: fixed;

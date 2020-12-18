@@ -1,57 +1,99 @@
+import clsx from "clsx";
 import React from "react";
-import { Button, Menu } from "antd";
+import { Button } from "antd";
 import {
   CalendarFilled,
   HomeFilled,
   InfoCircleFilled,
   PhoneFilled,
   CustomerServiceFilled,
+  MenuOutlined,
+  CloseOutlined
 } from "@ant-design/icons";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import MenuButton from "./MenuButton";
 
-const { SubMenu } = Menu;
+interface NavigationProps {
+  location: any;
+}
 
-class Navigation extends React.Component<any, any> {
+interface NavigationState {
+  isOpen: boolean;
+}
+
+class Navigation extends React.Component<NavigationProps, NavigationState> {
+  constructor(props: NavigationProps | Readonly<NavigationProps>) {
+    super(props);
+    this.state = {
+      isOpen: true,
+    };
+  }
+
+  handleCloseButtonClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    e.preventDefault();
+    this.setState({ isOpen: false });
+  }
+
+  handleOpenButtonClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+    e.preventDefault();
+    this.setState({ isOpen: true });
+  }
+
+  handleButtonClick() {
+    this.setState({ isOpen: false });
+  }
+
   render() {
-    console.log(this.props.location.pathname);
+    const navClass = clsx(
+      "nav-menu-container",
+      this.state.isOpen ? "nav-open" : "nav-closed"
+    );
     return (
       <>
-      <div id="nav-menu-container">
-        <MenuButton icon={<HomeFilled />} text="Home" route="/home" />
-      </div>
-        <Menu
-          selectedKeys={[this.props.location.pathname]}
-          mode="horizontal"
-          multiple={false}
-          className="navigation"
-        >
-          <Menu.Item color="white" key="/home" icon={<HomeFilled />}>
-            <Link color="white" to="/home">
-              Home
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/about" icon={<InfoCircleFilled />}>
-            <Link to="/about">
-              <span>About Us</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/contact" icon={<PhoneFilled />}>
-            <Link to="/contact">
-              <span>Contact</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/booking/new" icon={<CalendarFilled />}>
-            <Link to="/booking/new">
-              <span>Book</span>
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="/services" icon={<CustomerServiceFilled />}>
-            <Link to="/services">
-              <span>Services</span>
-            </Link>
-          </Menu.Item>
-        </Menu>
+        <Button
+          type="link"
+          id="open-button"
+          onClick={(e) => this.handleOpenButtonClick(e)}
+          icon={<MenuOutlined />}
+        />
+        <div className={navClass}>
+          <MenuButton
+            icon={<HomeFilled />}
+            text="Home"
+            route="/home"
+            onButtonClick={() => this.handleButtonClick()}
+          />
+          <MenuButton
+            icon={<InfoCircleFilled />}
+            text="About Us"
+            route="/about"
+            onButtonClick={() => this.handleButtonClick()}
+          />
+          <MenuButton
+            icon={<PhoneFilled />}
+            text="Contact"
+            route="/contact"
+            onButtonClick={() => this.handleButtonClick()}
+          />
+          <MenuButton
+            icon={<CalendarFilled />}
+            text="Book"
+            route="/booking"
+            onButtonClick={() => this.handleButtonClick()}
+          />
+          <MenuButton
+            icon={<CustomerServiceFilled />}
+            text="Services"
+            route="/services"
+            onButtonClick={() => this.handleButtonClick()}
+          />
+          <Button
+            type="link"
+            id="close-button"
+            onClick={(e) => this.handleCloseButtonClick(e)}
+            icon={<CloseOutlined />}
+          />
+        </div>
       </>
     );
   }
