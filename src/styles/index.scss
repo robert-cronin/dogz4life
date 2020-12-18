@@ -190,6 +190,13 @@ body {
         flex-direction: column;
         background-color: white;
         overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .nav-menu-container>hr {
+        height: 10px;
+        background-color: $primary-color-darker;
+        width: 90vw;
     }
 
     .nav-open {

@@ -8,7 +8,8 @@ import {
   PhoneFilled,
   CustomerServiceFilled,
   MenuOutlined,
-  CloseOutlined
+  CloseOutlined,
+  LoginOutlined
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import MenuButton from "./MenuButton";
@@ -85,6 +86,13 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
             icon={<CustomerServiceFilled />}
             text="Services"
             route="/services"
+            onButtonClick={() => this.handleButtonClick()}
+          />
+          <hr />
+          <MenuButton
+            icon={<LoginOutlined />}
+            text="Login/Signup"
+            route="/signup"
             onButtonClick={() => this.handleButtonClick()}
           />
           <Button

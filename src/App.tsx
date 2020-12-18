@@ -55,7 +55,7 @@ class App extends React.Component<AppProps, AppState> {
               <Route path="/contact">
                 <PaymentForm />
               </Route>
-              <Route path="/booking/new">
+              <Route path="/booking">
                 <NewClientPage />
               </Route>
               <Route path="*">
