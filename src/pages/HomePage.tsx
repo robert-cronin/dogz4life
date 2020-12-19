@@ -52,13 +52,20 @@ class HomePage extends React.Component {
           </h2>
           <img src={Logo} />
           <div className="action-banner">
-            <Button type="primary">Book Now!</Button>
+            <a
+              target="_top"
+              className="square-payment"
+              href="https://square.site/book/LMQY4941CGM9H/dogz-4-life"
+              rel="nofollow"
+            >
+              Book an Appointment
+            </a>
           </div>
           <div className="social-banner">
             <h1>Connect With Dogz4Life!</h1>
             <div className="social-contact">
-              <SocialIcon url="http://twitter.com/jaketrent" />
-              <SocialIcon url="http://facebook.com/jaketrent" />
+              <SocialIcon url="https://www.facebook.com/dogz4lifeaus/" />
+              <SocialIcon url="https://www.instagram.com/dogz4lifeaus/" />
             </div>
           </div>
         </div>

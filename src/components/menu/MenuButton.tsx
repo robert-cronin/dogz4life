@@ -6,12 +6,13 @@ interface MenuButtonProps {
   text: string;
   route: string;
   onButtonClick: () => void;
+  id?: string
 }
 
 class MenuButton extends React.Component<MenuButtonProps, any> {
   render() {
     return (
-      <div className="menu-button">
+      <div className="menu-button" id={this.props.id}>
         {this.props.icon}
         <Link to={this.props.route} onClick={() => this.props.onButtonClick()}>
           {this.props.text}

@@ -26,7 +26,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
   constructor(props: NavigationProps | Readonly<NavigationProps>) {
     super(props);
     this.state = {
-      isOpen: true,
+      isOpen: false,
     };
   }
 
@@ -89,6 +89,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
             onButtonClick={() => this.handleButtonClick()}
           />
           <hr />
+          <div id="pc-menu-spacer" />
           <MenuButton
             icon={<LoginOutlined />}
             text="Login/Signup"

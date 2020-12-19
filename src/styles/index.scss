@@ -5,6 +5,7 @@ $primary-color-darker: darken($primary-color-dark, 10%);
 $secondary-color: rgb(113, 188, 82);
 $secondary-color-dark: darken($secondary-color, 10%);
 $secondary-color-darker: darken($secondary-color-dark, 10%);
+$background-color: rgb(255, 249, 243);
 // box-shadow
 $horizontal-length: 2px;
 $vertical-length: 2px;
@@ -23,6 +24,7 @@ body {
 
 #root {
     height: 100%;
+    background-color: $background-color;
 }
 
 //////////////////////
@@ -173,7 +175,6 @@ body {
     to {
         left: -100vh;
     }
-
 }
 
 #open-button {
@@ -248,6 +249,14 @@ $mobile-breakpoint: 800px;
     }
 
     // hide the horizontal line
+    .nav-menu-container hr {
+        display: none;
+    }
+
+    // place login on right hand side
+    #pc-menu-spacer {
+        flex-grow: 1;
+    }
 }
 
 // outdated
@@ -299,6 +308,27 @@ $mobile-breakpoint: 800px;
     color: $primary-color;
 }
 
+.square-payment {
+    background-color: #7dbf3b;
+    color: white;
+    height: 40px;
+    text-transform: uppercase;
+    font-family: "Square Market", "helvetica neue", helvetica, arial, sans-serif;
+    letter-spacing: 1px;
+    line-height: 38px;
+    padding: 0 28px;
+    border-radius: 3px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.home-page>.image {
+    display: flex;
+    flex-wrap: row nowrap;
+}
+
 .home-page>img {
     width: 100%;
     -webkit-box-shadow: $box-shadow-opts;
@@ -309,7 +339,7 @@ $mobile-breakpoint: 800px;
 $action-banner-overflow: 10;
 
 .home-page>.action-banner {
-    background-color: $secondary-color;
+    background-color: darken($background-color, 20%);
     margin-top: $action-banner-overflow + px;
     margin-left: -$action-banner-overflow + px;
     padding-left: $action-banner-overflow + px;

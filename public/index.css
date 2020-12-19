@@ -8,6 +8,7 @@ body {
 
 #root {
   height: 100%;
+  background-color: #fff9f3;
 }
 
 ::-webkit-scrollbar {
@@ -205,6 +206,14 @@ body {
   #open-button {
     display: none;
   }
+
+  .nav-menu-container hr {
+    display: none;
+  }
+
+  #pc-menu-spacer {
+    flex-grow: 1;
+  }
 }
 .navigation {
   background-color: #b462f1 !important;
@@ -247,6 +256,27 @@ body {
   color: #b462f1;
 }
 
+.square-payment {
+  background-color: #7dbf3b;
+  color: white;
+  height: 40px;
+  text-transform: uppercase;
+  font-family: "Square Market", "helvetica neue", helvetica, arial, sans-serif;
+  letter-spacing: 1px;
+  line-height: 38px;
+  padding: 0 28px;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.home-page > .image {
+  display: flex;
+  flex-wrap: row nowrap;
+}
+
 .home-page > img {
   width: 100%;
   -webkit-box-shadow: 2px 2px 6px -1px rgba(0, 0, 0, 0.97);
@@ -255,7 +285,7 @@ body {
 }
 
 .home-page > .action-banner {
-  background-color: #71bc52;
+  background-color: #ffc68d;
   margin-top: 10px;
   margin-left: -10px;
   padding-left: 10px;
