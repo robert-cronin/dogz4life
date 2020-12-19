@@ -1,9 +1,7 @@
 import React from "react";
+import { Button } from "antd";
+import { SocialIcon } from "react-social-icons";
 import Logo from "../static/only-tree-background.jpg";
-import { Layout, BackTop, Row, Col, Image, List, Button } from "antd";
-import { UpCircleOutlined, CalendarOutlined } from "@ant-design/icons";
-import Leaf from "../static/Leaf.svg";
-const { Header, Footer, Content } = Layout;
 
 class HomePage extends React.Component {
   state = {
@@ -57,8 +55,11 @@ class HomePage extends React.Component {
             <Button type="primary">Book Now!</Button>
           </div>
           <div className="social-banner">
-            <h1>Follow Dogz4Life!</h1>
-            <Button type="primary">Book Now!</Button>
+            <h1>Connect With Dogz4Life!</h1>
+            <div className="social-contact">
+              <SocialIcon url="http://twitter.com/jaketrent" />
+              <SocialIcon url="http://facebook.com/jaketrent" />
+            </div>
           </div>
         </div>
       </>

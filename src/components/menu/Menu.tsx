@@ -22,7 +22,7 @@ interface NavigationState {
   isOpen: boolean;
 }
 
-class Navigation extends React.Component<NavigationProps, NavigationState> {
+class Menu extends React.Component<NavigationProps, NavigationState> {
   constructor(props: NavigationProps | Readonly<NavigationProps>) {
     super(props);
     this.state = {
@@ -107,4 +107,4 @@ class Navigation extends React.Component<NavigationProps, NavigationState> {
   }
 }
 
-export default withRouter((props) => <Navigation {...props} />);
+export default withRouter((props) => <Menu {...props} />);

@@ -181,7 +181,9 @@ body {
     align-self: center;
 }
 
-@media screen and (max-width: 600px) {
+$mobile-breakpoint: 800px;
+
+@media screen and (max-width: $mobile-breakpoint) {
     .nav-menu-container {
         position: fixed;
         left: -100vw;
@@ -228,7 +230,7 @@ body {
     }
 }
 
-@media screen and (min-width: 601px) {
+@media screen and (min-width: $mobile-breakpoint+1) {
     .nav-menu-container {
         flex-direction: row;
     }
@@ -244,6 +246,8 @@ body {
     #open-button {
         display: none;
     }
+
+    // hide the horizontal line
 }
 
 // outdated
@@ -252,21 +256,6 @@ body {
     position: fixed;
     z-index: 1;
     width: 100%;
-}
-
-.navigation>.ant-menu-item-selected a,
-.navigation>.ant-menu-item-active a {
-    color: white !important;
-}
-
-.navigation>.ant-menu-item-selected,
-.navigation>.ant-menu-item-active {
-    color: white !important;
-    border-color: white !important;
-}
-
-.navigation>svg {
-    color: white !important;
 }
 
 // Footer
@@ -330,4 +319,15 @@ $action-banner-overflow: 10;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.social-banner {
+    height: 200px;
+}
+
+.social-contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
 }

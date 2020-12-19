@@ -1,10 +1,10 @@
-const express = require('express')
-const bodyParser = require("body-parser");
-const path = require("path");
-const session = require("express-session");
-const fs = require("fs");
-const http = require("http");
-const https = require("https");
+import express from 'express';
+import bodyParser from "body-parser";
+import path from "path";
+import session from "express-session";
+import fs from "fs";
+import http from "http";
+import https from "https";
 
 async function main() {
     const app = express();

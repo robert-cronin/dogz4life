@@ -1,5 +1,5 @@
 import React from "react";
-import Navigation from "./components/menu/Navigation";
+import Menu from "./components/menu/Menu";
 import DocumentTitle from "react-document-title";
 import { Layout, Popover, Avatar, Button, Affix, Result } from "antd";
 import { MessageOutlined, CloseOutlined } from "@ant-design/icons";
@@ -37,7 +37,7 @@ class App extends React.Component<AppProps, AppState> {
       <Router>
         <Layout className="layout-window">
           <Header className="navigation">
-            <Navigation />
+            <Menu />
           </Header>
           <Content className="site-content">
             {/* A <Switch> looks through its children <Route>s and
