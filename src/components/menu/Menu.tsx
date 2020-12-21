@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import MenuButton from "./MenuButton";
+import LoginModal from "../../pages/LoginModal";
 
 interface NavigationProps {
   location: any;
@@ -90,12 +91,13 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
           />
           <hr />
           <div id="pc-menu-spacer" />
-          <MenuButton
+          <LoginModal />
+          {/* <MenuButton
             icon={<LoginOutlined />}
             text="Login/Signup"
             route="/signup"
             onButtonClick={() => this.handleButtonClick()}
-          />
+          /> */}
           <Button
             type="link"
             id="close-button"

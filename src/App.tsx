@@ -63,7 +63,11 @@ class App extends React.Component<AppProps, AppState> {
                   status="404"
                   title="404"
                   subTitle="Sorry, the page you visited does not exist."
-                  extra={<Button type="primary"><Link to="/home">Back Home</Link></Button>}
+                  extra={
+                    <Button type="primary">
+                      <Link to="/home">Back Home</Link>
+                    </Button>
+                  }
                 />
               </Route>
             </Switch>
