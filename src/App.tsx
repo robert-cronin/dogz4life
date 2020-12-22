@@ -39,7 +39,7 @@ class App extends React.Component<AppProps, AppState> {
           <Header id="page-header">
             <Menu />
           </Header>
-          <Content className="site-content">
+          <Content id="page-content">
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>

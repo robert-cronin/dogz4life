@@ -54,14 +54,9 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
       <>
         <Button
           type="link"
-          id="open-button"
+          id="open-menu-button"
           onClick={(e) => this.handleOpenButtonClick(e)}
           icon={<MenuOutlined />}
-          style={{
-            height: "100%",
-            margin: "0",
-            left: "0"
-          }}
         />
         <div
           className={navClass}
@@ -104,7 +99,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
           <LoginModal />
           <Button
             type="link"
-            id="close-button"
+            id="close-menu-button"
             onClick={(e) => this.handleCloseButtonClick(e)}
             icon={<CloseOutlined />}
           />

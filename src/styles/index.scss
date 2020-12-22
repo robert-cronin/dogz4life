@@ -179,7 +179,7 @@ body {
     }
 }
 
-#open-button {
+#open-menu-button {
     color: white;
     align-self: center;
 }
@@ -216,15 +216,17 @@ $mobile-breakpoint: 800px;
         animation-duration: 0.5s;
     }
 
-    #open-button {
+    #open-menu-button {
         position: absolute;
-        left: 5px;
-        top: 5px;
+        height: 100%;
+        margin: 0;
+        left: 0;
+        top: 0;
     }
 
-    #close-button {
+    #close-menu-button {
         position: absolute;
-        right: 5px;
+        left: 5px;
         top: 5px;
     }
 
@@ -238,7 +240,7 @@ $mobile-breakpoint: 800px;
         flex-direction: row;
     }
 
-    .nav-menu-container>#close-button {
+    .nav-menu-container>#close-menu-button {
         display: none;
     }
 
@@ -246,7 +248,7 @@ $mobile-breakpoint: 800px;
         background-color: white;
     }
 
-    #open-button {
+    #open-menu-button {
         display: none;
     }
 
@@ -286,9 +288,9 @@ $mobile-breakpoint: 800px;
 //////////////////
 // Site Content //
 //////////////////
-.site-content {
-    padding-top: 64px;
-    padding-bottom: 60px;
+#page-content {
+    padding-top: 50px;
+    padding-bottom: 40px;
     overflow: scroll;
     background-color: white !important;
 }
