@@ -1,8 +1,8 @@
-import React from 'react'
-import { Steps, Button, message, Card, Form, Space } from 'antd';
-import NewClientInfo from '../components/new-client/NewClientInfo'
-import NewClientCredentials from '../components/new-client/NewClientCredentials'
-import PetInfo from '../components/new-client/PetInfo'
+import React from "react";
+import { Steps, Button, message, Card, Form, Space } from "antd";
+import NewClientInfo from "../components/new-client/NewClientInfo";
+import PetInfo from "../components/new-client/PetInfo";
+import PetHealthFlags from "../components/new-client/PetHealthFlags";
 const { Step } = Steps;
 
 class NewClientPage extends React.Component {
@@ -12,38 +12,67 @@ class NewClientPage extends React.Component {
 
   next() {
     this.setState({
-      current: this.state.current + 1
-    })
-  };
+      current: this.state.current + 1,
+    });
+  }
 
   prev() {
     this.setState({
-      current: this.state.current - 1
-    })
-  };
+      current: this.state.current - 1,
+    });
+  }
 
   onFinish(values) {
-    console.log('Success:', values);
-  };
+    console.log("Success:", values);
+  }
 
   onFinishFailed(errorInfo) {
-    console.log('Failed:', errorInfo);
-  };
+    console.log("Failed:", errorInfo);
+  }
 
-  steps = [{
-    title: "Client Details",
-    content: <NewClientInfo />
-  }, {
-    title: "Credentials",
-    content: <NewClientCredentials />
-  }, {
-    title: "Pet Info",
-    content: <PetInfo />
-  }]
+  steps = [
+    {
+      title: "Client Details",
+      content: <NewClientInfo />,
+    },
+    {
+      title: "Pet Info",
+      content: <PetInfo />,
+    },
+    {
+      title: "Pet Health Flags",
+      content: <PetHealthFlags />,
+    },
+  ];
 
   render() {
     return (
-      <Card title="New Client Form" className="new-client-form-card">
+      <Card
+        title="New Client Form"
+        id="new-client-form-card"
+        actions={[
+          this.state.current < this.steps.length - 1 && (
+            <Button type="primary" onClick={() => this.next()}>
+              Next
+            </Button>
+          ),
+          this.state.current === this.steps.length - 1 && (
+            <Form.Item>
+              <Button
+                type="primary"
+                onClick={() => message.success("Processing complete!")}
+              >
+                Done
+              </Button>
+            </Form.Item>
+          ),
+          this.state.current > 0 && (
+            <Form.Item>
+              <Button onClick={() => this.prev()}>Previous</Button>
+            </Form.Item>
+          ),
+        ]}
+      >
         <Form
           name="basic"
           layout="vertical"
@@ -53,38 +82,18 @@ class NewClientPage extends React.Component {
           onFinishFailed={this.onFinishFailed}
         >
           <Steps current={this.state.current}>
-            {this.steps.map(item => (
+            {this.steps.map((item) => (
               <Step key={item.title} title={item.title} />
             ))}
           </Steps>
           <br />
-          <div className="steps-content">{this.steps[this.state.current].content}</div>
-          <Space align="end">
-            {this.state.current < this.steps.length - 1 && (
-              <Button type="primary" onClick={() => this.next()}>
-                Next
-              </Button>
-            )}
-            {this.state.current === this.steps.length - 1 && (
-              <Form.Item>
-                <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                  Done
-                </Button>
-              </Form.Item>
-            )}
-            {this.state.current > 0 && (
-              <Form.Item>
-              <Button onClick={() => this.prev()}>
-                Previous
-              </Button>
-              </Form.Item>
-            )}
-          </Space>
+          <div className="steps-content">
+            {this.steps[this.state.current].content}
+          </div>
         </Form>
       </Card>
     );
   }
 }
 
-
-export default NewClientPage
+export default NewClientPage;

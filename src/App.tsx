@@ -36,7 +36,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <Router>
         <Layout className="layout-window">
-          <Header className="navigation">
+          <Header id="page-header">
             <Menu />
           </Header>
           <Content className="site-content">

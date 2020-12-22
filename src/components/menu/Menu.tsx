@@ -9,7 +9,7 @@ import {
   CustomerServiceFilled,
   MenuOutlined,
   CloseOutlined,
-  LoginOutlined
+  LoginOutlined,
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import MenuButton from "./MenuButton";
@@ -57,8 +57,18 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
           id="open-button"
           onClick={(e) => this.handleOpenButtonClick(e)}
           icon={<MenuOutlined />}
+          style={{
+            height: "100%",
+            margin: "0",
+            left: "0"
+          }}
         />
-        <div className={navClass}>
+        <div
+          className={navClass}
+          style={{
+            display: "static",
+          }}
+        >
           <MenuButton
             icon={<HomeFilled />}
             text="Home"
@@ -92,12 +102,6 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
           <hr />
           <div id="pc-menu-spacer" />
           <LoginModal />
-          {/* <MenuButton
-            icon={<LoginOutlined />}
-            text="Login/Signup"
-            route="/signup"
-            onButtonClick={() => this.handleButtonClick()}
-          /> */}
           <Button
             type="link"
             id="close-button"
