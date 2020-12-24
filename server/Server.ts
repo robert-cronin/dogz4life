@@ -5,10 +5,12 @@ import session from "express-session";
 import fs from "fs";
 import http from "http";
 import https from "https";
+import SquareAPIControl from './SquareAPIControl';
 
 async function main() {
     const app = express();
     const memory = new session.MemoryStore();
+    const squareAPIControl = new SquareAPIControl()
 
     app.set("trust proxy", 1); // trust first proxy
     app.use(
@@ -41,6 +43,11 @@ async function main() {
     //     },
     //     app
     // );
+
+    app.get('/api/customers/list', async (req, res) => {
+        const customerList = await squareAPIControl.listCustomers()
+        res.send(customerList)
+    })
 }
 
 main();

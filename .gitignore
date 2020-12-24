@@ -24,3 +24,6 @@ yarn-error.log*
 
 # tmp folder
 /tmp
+
+# environment vars
+.env
