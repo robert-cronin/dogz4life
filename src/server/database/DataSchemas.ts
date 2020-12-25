@@ -47,3 +47,11 @@ interface PetHealthFlag {
     PET_ID: number
     FLAG: string
 }
+
+export type {
+    User,
+    Client,
+    ClientContact,
+    Pet,
+    PetHealthFlag
+}

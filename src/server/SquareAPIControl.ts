@@ -47,12 +47,12 @@ class SquareAPIControl {
     try {
       let { result } = await this.client.customersApi.listCustomers();
       console.log("API called successfully. Returned data: ", result);
-      return result.customers
+      return result.customers ?? [];
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log("Errors: ", error.errors);
+        throw Error(`Errors: ${error.errors}`);
       } else {
-        console.log("Unexpected Error: ", error);
+        throw Error(`Unexpected Error: ${error}`);
       }
     }
   }

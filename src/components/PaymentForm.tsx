@@ -31,10 +31,13 @@ class PaymentForm extends React.Component<PaymentFormProps, PaymentFormState> {
   }
 
   cardNonceResponseReceived = (
-    errors: any[],
+    errors: any[] | null,
     nonce: string,
     cardData: any,
-    buyerVerificationToken: string
+    buyerVerificationToken?: string,
+    billingContact?: any,
+    shippingContact?: any,
+    shippingOption?: any
   ) => {
     if (errors) {
       this.setState({
@@ -109,8 +112,8 @@ class PaymentForm extends React.Component<PaymentFormProps, PaymentFormState> {
           <h1>Payment Page</h1>
 
           <SquarePaymentForm
-            formId={null}
-            apiWrapper={null}
+            formId={'null'}
+            apiWrapper={'null'}
             sandbox={true}
             // robert.cronin@uqconnect.edu.au developer ids
             // applicationId={"sandbox-sq0idb-biDfHvQKMHE2wvX7Dsg0OA"}
