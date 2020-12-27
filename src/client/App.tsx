@@ -17,6 +17,7 @@ import PaymentForm from "./components/PaymentForm";
 import ContactFormContent from "./components/contact-form/ContactFormContent";
 import ContactFormTitle from "./components/contact-form/ContactFormTitle";
 
+
 const { Header, Footer, Content } = Layout;
 
 interface AppProps {}

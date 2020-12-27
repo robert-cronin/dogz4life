@@ -5,7 +5,6 @@ import Bella from "../static/bella.jpg";
 import Benni from "../static/benni-silly.jpg";
 import { Layout, BackTop, Row, Col, Image, List, Button } from "antd";
 import {
-  UpCircleOutlined,
   CalendarOutlined,
   CaretDownOutlined,
 } from "@ant-design/icons";
