@@ -76,9 +76,12 @@ const clientConfig = {
         type: "asset/resource",
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+        test: /\.(woff2?|ttf|otf|eot|svg)$/,
         exclude: /node_modules/,
-        use: ["file-loader?name=[name].[ext]"], // ?name=[name].[ext] is only necessary to preserve the original file name
+        loader: "file-loader",
+        options: {
+          name: "[path][name].[ext]",
+        },
       },
     ],
   },

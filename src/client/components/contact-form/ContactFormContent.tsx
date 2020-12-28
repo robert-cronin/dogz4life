@@ -1,6 +1,8 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
 import FormItemLabel from "antd/lib/form/FormItemLabel";
+import { GoogleReCaptcha } from "react-google-recaptcha-v3";
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface ContactFormState {
   name: string;
@@ -9,7 +11,7 @@ interface ContactFormState {
 }
 
 class ContactFormContent extends React.Component<any, ContactFormState> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       name: "",
@@ -28,6 +30,10 @@ class ContactFormContent extends React.Component<any, ContactFormState> {
 
   handleMessageChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     this.setState({ message: e.target.value });
+  }
+
+  onChange(value) {
+    console.log("Captcha value:", value);
   }
 
   render() {
@@ -63,7 +69,9 @@ class ContactFormContent extends React.Component<any, ContactFormState> {
             rows={10}
           />
         </Form.Item>
+
         <Form.Item style={{ display: "flex", justifyContent: "center" }}>
+          <ReCAPTCHA sitekey="6Lfh1BcaAAAAALQqPSPeP4k_BBm_HM08FQ2RcZIZ" onChange={(e) => this.onChange} />
           <Button htmlType="submit">SEND</Button>
         </Form.Item>
       </Form>

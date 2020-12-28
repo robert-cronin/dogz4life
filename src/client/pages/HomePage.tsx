@@ -45,10 +45,10 @@ class HomePage extends React.Component {
       <>
         <div className="home-page">
           <h1>
-            <span>DOGZ 4 LIFE</span>
+            <span id="home-page-title">DOGZ 4 LIFE</span>
           </h1>
           <h2>
-            <span>FOR THE LOVE OF DOGZ</span>
+            <span id="home-page-subtitle">FOR THE LOVE OF DOGZ</span>
           </h2>
           <img src={Logo} />
           <div className="action-banner">
