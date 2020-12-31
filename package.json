@@ -44,11 +44,13 @@
         "@types/react-router-dom": "^5.1.6",
         "@types/sqlite3": "^3.1.6",
         "awesome-typescript-loader": "^5.2.1",
+        "copy-webpack-plugin": "^7.0.0",
         "css-loader": "^5.0.1",
         "express": "^4.17.1",
         "html-webpack-plugin": "^4.5.0",
         "mini-css-extract-plugin": "^1.3.3",
         "nodemon": "^2.0.6",
+        "open": "^7.3.0",
         "sass": "^1.30.0",
         "source-map-loader": "^2.0.0",
         "style-loader": "^2.0.0",
@@ -60,10 +62,11 @@
         "webpack-dev-server": "^3.11.0"
     },
     "scripts": {
-        "start": "webpack-dev-server --open",
-        "build": "webpack",
-        "dev": "concurrently \"npm run run:*\"",
-        "run:server": "ts-node ./server/Server.ts --isolatedModules false"
+        "watch:webpack": "webpack --watch",
+        "watch:nodemon": "nodemon ./build/server/server.js --watch ./build",
+        "open-dev": "node ./scripts/open-dev.js",
+        "dev": "concurrently \"npm:watch:*\" \"npm:open-dev\"",
+        "build": "webpack"
     },
     "browserslist": {
         "production": [

@@ -24,14 +24,25 @@ async function main() {
   );
 
   // serve static resources
-  app.use(express.static(path.join(__dirname, "..", "build")));
+  app.use(express.static(path.join(__dirname, "..", "client")));
 
   app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+    console.log(process.env.NODE_ENV);
+    console.log("ergerg");
+    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
   });
 
-  const httpServer = http.createServer(app);
-  httpServer.listen(8080, "0.0.0.0");
+  app.get("/api/customers/list", async (req, res) => {
+    try {
+      const customerList = await squareAPIControl.listCustomers();
+      res.send(customerList);
+    } catch (error) {
+      console.log('324234');
+      
+      console.log(error);
+      
+    }
+  });
 
   // const key = "";
   // const cert = "";
@@ -42,10 +53,8 @@ async function main() {
   //     app
   // );
 
-  app.get("/api/customers/list", async (req, res) => {
-    const customerList = await squareAPIControl.listCustomers();
-    res.send(customerList);
-  });
+  const httpServer = http.createServer(app);
+  httpServer.listen(3000, "0.0.0.0");
 }
 
 main();

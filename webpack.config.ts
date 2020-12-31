@@ -2,48 +2,42 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
-// const serverConfig = {
-//   name: "server",
-//   entry: "./src/server/Server.ts",
-//   mode: "production",
-//   output: {
-//     path: path.resolve(__dirname, "dist"),
-//     filename: "server.js",
-//     library: "server",
-//     libraryTarget: "umd",
-//     globalObject: "this",
-//   },
-//   devtool: "source-map",
-//   resolve: {
-//     extensions: [".ts", ".js"],
-//   },
-//   target: "node",
-//   module: {
-//     rules: [
-//       {
-//         test: /\.tsx?$/,
-//         exclude: [/node_modules/],
-//         loader: "ts-loader",
-//         options: {
-//           configFile: "../../tsconfig.server.json",
-//         },
-//       },
-//     ],
-//   },
-//   watchOptions: {
-//     ignored: /node_modules/,
-//   },
-//   optimization: {
-//     minimize: false,
-//   },
-// };
+const serverConfig = {
+  name: "server",
+  entry: "./src/server/Server.ts",
+  mode: "production",
+  output: {
+    path: path.resolve(__dirname, "build", "server"),
+    filename: "server.js",
+  },
+  devtool: "source-map",
+  resolve: {
+    extensions: [".ts", ".js"],
+  },
+  target: "node",
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: [/node_modules/],
+        loader: "ts-loader",
+      },
+    ],
+  },
+  watchOptions: {
+    ignored: /node_modules/,
+  },
+  optimization: {
+    minimize: false,
+  },
+};
 
 const clientConfig = {
   entry: "./src/client/index.tsx",
   target: "web",
   mode: "development",
   output: {
-    path: path.resolve(__dirname, "build"),
+    path: path.resolve(__dirname, "build", "client"),
     filename: "bundle.js",
   },
   resolve: {
@@ -72,11 +66,11 @@ const clientConfig = {
         ],
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+        test: /\.(png|svg|jpg|jpeg|gif|ico|json)$/i,
         type: "asset/resource",
       },
       {
-        test: /\.(woff2?|ttf|otf|eot|svg)$/,
+        test: /\.(woff2?|ttf|otf|eot)$/,
         exclude: /node_modules/,
         loader: "file-loader",
         options: {
@@ -98,5 +92,4 @@ const clientConfig = {
   ],
 };
 
-module.exports = [clientConfig];
-// module.exports = [serverConfig, clientConfig];
+module.exports = [serverConfig, clientConfig];
