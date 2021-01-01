@@ -26,6 +26,19 @@ async function main() {
   // serve static resources
   app.use(express.static(path.join(__dirname, "..", "client")));
 
+  // redirect to https
+  app.use((req, res, next) => {
+    if (
+      process.env.NODE_ENV === "production" &&
+      req.headers["x-forwarded-proto"] !== "https"
+    ) {
+      // the statement for performing our redirection
+      return res.redirect("https://" + req.headers.host + req.url);
+    } else {
+      return next();
+    }
+  });
+
   app.get("/", (req, res) => {
     console.log(process.env.NODE_ENV);
     console.log("ergerg");
@@ -37,24 +50,27 @@ async function main() {
       const customerList = await squareAPIControl.listCustomers();
       res.send(customerList);
     } catch (error) {
-      console.log('324234');
-      
+      console.log("324234");
+
       console.log(error);
-      
     }
   });
 
-  // const key = "";
-  // const cert = "";
-  // const httpsServer = https.createServer({
-  //         key,
-  //         cert,
-  //     },
-  //     app
-  // );
-
+  // run http server (port 80)
   const httpServer = http.createServer(app);
-  httpServer.listen(3000, "0.0.0.0");
+  httpServer.listen(80, "0.0.0.0");
+
+  // run https server (port 443)
+  const key = "/etc/letsencrypt/live/dogz4life.com.au/privkey.pem";
+  const cert = "/etc/letsencrypt/live/dogz4life.com.au/cert.pem";
+  const httpsServer = https.createServer(
+    {
+      key,
+      cert,
+    },
+    app
+  );
+  httpsServer.listen(443, "0.0.0.0");
 }
 
 main();

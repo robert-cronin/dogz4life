@@ -1,4 +1,5 @@
 const path = require("path");
+const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
@@ -89,6 +90,13 @@ const clientConfig = {
         "index.html"
       ),
     }),
+    new CopyPlugin({
+      patterns: [
+        {from: "./src/client/static/favicon.ico", to: "."},
+        {from: "./src/client/static/robots.txt", to: "."},
+        {from: "./src/client/static/manifest.json", to: "."},
+      ]
+    })
   ],
 };
 

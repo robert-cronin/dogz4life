@@ -52,7 +52,7 @@ class NewClientInfo extends React.Component {
                 <Option value="Female">Female</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Is she/he Sprayed or Neutered?" name="sprayed">
+            <Form.Item label="Is she/he Desexed?" name="desexed">
               <Switch />
             </Form.Item>
             <Form.Item label="Weight" name="weight">
