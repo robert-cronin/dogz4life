@@ -1,8 +1,9 @@
-import express from "express";
+import fs from 'fs';
 import path from "path";
-import session from "express-session";
 import http from "http";
 import https from "https";
+import express from "express";
+import session from "express-session";
 import SquareAPIControl from "./SquareAPIControl";
 
 async function main() {
@@ -50,8 +51,6 @@ async function main() {
       const customerList = await squareAPIControl.listCustomers();
       res.send(customerList);
     } catch (error) {
-      console.log("324234");
-
       console.log(error);
     }
   });
@@ -61,8 +60,8 @@ async function main() {
   httpServer.listen(80, "0.0.0.0");
 
   // run https server (port 443)
-  const key = "/etc/letsencrypt/live/dogz4life.com.au/privkey.pem";
-  const cert = "/etc/letsencrypt/live/dogz4life.com.au/cert.pem";
+  const key = fs.readFileSync("/etc/letsencrypt/live/dogz4life.com.au/privkey.pem")
+  const cert = fs.readFileSync("/etc/letsencrypt/live/dogz4life.com.au/cert.pem")
   const httpsServer = https.createServer(
     {
       key,

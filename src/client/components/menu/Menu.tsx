@@ -21,6 +21,7 @@ interface NavigationProps {
 
 interface NavigationState {
   isOpen: boolean;
+  isModalVisible: boolean;
 }
 
 class Menu extends React.Component<NavigationProps, NavigationState> {
@@ -28,6 +29,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
     super(props);
     this.state = {
       isOpen: false,
+      isModalVisible: false,
     };
   }
 
@@ -94,9 +96,23 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
             route="/services"
             onButtonClick={() => this.handleButtonClick()}
           />
+
           <hr />
           <div id="pc-menu-spacer" />
-          <LoginModal />
+          <MenuButton
+            icon={<LoginOutlined />}
+            text="Login/Signup"
+            route=""
+            onButtonClick={() => {
+              this.handleButtonClick();
+              this.setState({ isModalVisible: true });
+            }}
+          />
+          <LoginModal
+            showModal={() => this.setState({ isModalVisible: true })}
+            hideModal={() => this.setState({ isModalVisible: false })}
+            isModalVisible={this.state.isModalVisible}
+          />
           <Button
             type="link"
             id="close-menu-button"

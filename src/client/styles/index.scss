@@ -167,11 +167,15 @@ body {
 .menu-button {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding-left: 20px;
     padding-right: 20px;
     height: 100%;
+}
+
+.menu-button>a {
+    padding-left: 5px;
 }
 
 .menu-button .selected {}
@@ -246,8 +250,16 @@ $mobile-breakpoint: 800px;
         top: 5px;
     }
 
+    .menu-button {
+        color: white;
+    }
+
     .menu-button:hover {
         background-color: $primary-color;
+    }
+
+    .menu-button>a {
+        color: white;
     }
 }
 
@@ -258,10 +270,6 @@ $mobile-breakpoint: 800px;
 
     .nav-menu-container>#close-menu-button {
         display: none;
-    }
-
-    .menu-button:hover {
-        background-color: white;
     }
 
     #open-menu-button {
@@ -276,6 +284,16 @@ $mobile-breakpoint: 800px;
     // place login on right hand side
     #pc-menu-spacer {
         flex-grow: 1;
+    }
+
+    .menu-button {
+        color: white;
+    }
+
+    .menu-button:hover {
+        color: $primary-color-dark;
+        background-color: white;
+        cursor: pointer;
     }
 }
 
@@ -333,7 +351,7 @@ $mobile-breakpoint: 800px;
 }
 
 .square-payment {
-    background-color: #7dbf3b;
+    background-color: $primary-color;
     color: white;
     height: 40px;
     text-transform: uppercase;
@@ -360,10 +378,10 @@ $mobile-breakpoint: 800px;
     box-shadow: $box-shadow-opts;
 }
 
-$action-banner-overflow: 10;
+$action-banner-overflow: 20;
 
 .home-page>.action-banner {
-    background-color: darken($background-color, 20%);
+    background-color: $secondary-color;
     margin-top: $action-banner-overflow + px;
     margin-left: -$action-banner-overflow + px;
     padding-left: $action-banner-overflow + px;

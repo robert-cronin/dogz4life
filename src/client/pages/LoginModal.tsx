@@ -1,21 +1,21 @@
 import React from "react";
-import { Button, Input, Modal, Form } from "antd";
-import { LoginOutlined } from "@ant-design/icons";
+import { Input, Modal, Form, Button } from "antd";
+
+interface LoginModalProps {
+  showModal: () => void;
+  hideModal: () => void;
+  isModalVisible: boolean;
+}
 
 interface LoginModalState {
   email: string;
   password: string;
-  isModalVisible: boolean;
 }
 
-class LoginModal extends React.Component<any, LoginModalState> {
-  constructor(props) {
+class LoginModal extends React.Component<LoginModalProps, LoginModalState> {
+  constructor(props: LoginModalProps | Readonly<LoginModalProps>) {
     super(props);
 
-    this.showModal = this.showModal.bind(this);
-    this.handleOk = this.handleOk.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmitClick = this.handleSubmitClick.bind(this);
   }
@@ -23,26 +23,7 @@ class LoginModal extends React.Component<any, LoginModalState> {
   state = {
     email: "",
     password: "",
-    isModalVisible: false,
   };
-
-  showModal() {
-    this.setState({
-      isModalVisible: true,
-    });
-  }
-
-  handleOk() {
-    this.setState({
-      isModalVisible: false,
-    });
-  }
-
-  handleCancel() {
-    this.setState({
-      isModalVisible: false,
-    });
-  }
 
   ///////////////////
   // Form handlers //
@@ -69,20 +50,25 @@ class LoginModal extends React.Component<any, LoginModalState> {
   render() {
     return (
       <>
-        <Button type="link" icon={<LoginOutlined />} onClick={this.showModal}>
-          Login
-        </Button>
         <Modal
           title="Secure Login"
-          visible={this.state.isModalVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          visible={this.props.isModalVisible}
+          onOk={this.props.hideModal}
+          onCancel={this.props.hideModal}
+          footer={
+            <div>
+              <Button
+                style={{ display: "none" }}
+                htmlType="submit"
+                onClick={(e) => this.handleSubmitClick}
+              >
+                Signup
+              </Button>
+            </div>
+          }
           okText="Login"
         >
-          <Form
-            id="login-form"
-            layout="vertical"
-          >
+          <Form id="login-form" layout="vertical">
             <Form.Item label="Email">
               <Input
                 type="text"
@@ -99,7 +85,6 @@ class LoginModal extends React.Component<any, LoginModalState> {
                 onChange={(e) => this.handlePasswordChange(e)}
               />
             </Form.Item>
-            {/* <Button style={{display: "none"}} htmlType="submit" onClick={e => this.handleSubmitClick}>Signup</Button> */}
           </Form>
         </Modal>
       </>

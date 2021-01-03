@@ -4,19 +4,31 @@ import { Link } from "react-router-dom";
 interface MenuButtonProps {
   icon: React.ReactNode;
   text: string;
-  route: string;
+  route?: string;
   onButtonClick: () => void;
-  id?: string
+  id?: string;
 }
 
 class MenuButton extends React.Component<MenuButtonProps, any> {
   render() {
     return (
-      <div className="menu-button" id={this.props.id}>
+      <div
+        className="menu-button"
+        id={this.props.id}
+        onClick={this.props.onButtonClick}
+      >
         {this.props.icon}
-        <Link to={this.props.route} onClick={() => this.props.onButtonClick()}>
-          {this.props.text}
-        </Link>
+        {this.props.route ? (
+          <Link to={this.props.route} style={{ color: "inherit" }}>
+            {this.props.text}
+          </Link>
+        ) : (
+          <span
+            style={{ color: "inherit" }}
+          >
+            {this.props.text}
+          </span>
+        )}
       </div>
     );
   }
