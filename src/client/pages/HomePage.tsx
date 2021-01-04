@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "antd";
+import TwoDogs from "../static/two-dogs.jpg";
 import { SocialIcon } from "react-social-icons";
 import Logo from "../static/only-tree-background.jpg";
 
@@ -44,21 +45,29 @@ class HomePage extends React.Component {
     return (
       <>
         <div className="home-page">
-          <h1>
-            <span id="home-page-title">DOGZ 4 LIFE</span>
-          </h1>
-          <h2>
-            <span id="home-page-subtitle">FOR THE LOVE OF DOGZ</span>
-          </h2>
-          <img src={Logo} />
-          <div className="action-banner">
+          <div id="home-page-header">
+            <img src={Logo} />
+            <div>
+              <h1 id="home-page-title">DOGZ 4 LIFE</h1>
+              <h2 id="home-page-subtitle">FOR THE LOVE OF DOGZ</h2>
+            </div>
+          </div>
+          <div
+            className="action-banner"
+            style={{
+              backgroundImage: `url(${TwoDogs})`,
+            }}
+          >
+            <span>
+              A safe-haven where we understand that your dog means everything.
+            </span>
             <a
               target="_top"
               className="square-payment"
               href="https://square.site/book/LMQY4941CGM9H/dogz-4-life"
               rel="nofollow"
             >
-              Book an Appointment
+              Book Now
             </a>
           </div>
           <div className="social-banner">

@@ -14,19 +14,11 @@ $spread-radius: -1px;
 $shadow-color: rgba(0, 0, 0, 0.97);
 $box-shadow-opts: $horizontal-length $vertical-length $blur-radius $spread-radius $shadow-color;
 
-// // Fonts
-// @font-face {
-//     font-family: 'Lequire';
-//     src: format("./fonts/Lequire.otf") format("opentype");
-// }
-
-// #home-page-title {
-//     font-family: 'Lequire';
-// }
-
-// #home-page-subtitle {
-//     font-family: 'Lequire';
-// }
+// Fonts
+@font-face {
+    font-family: 'Lequire';
+    src: format("./fonts/Lequire.otf") format("opentype");
+}
 
 // Global
 * {
@@ -337,14 +329,16 @@ $mobile-breakpoint: 800px;
     margin: 5px;
 }
 
-.home-page>h1 {
+#home-page-title {
+    font-family: "Lequire";
     font-size: 40px;
     text-align: center;
     margin-bottom: 0;
     color: $secondary-color;
 }
 
-.home-page>h2 {
+#home-page-subtitle {
+    font-family: "Lequire";
     font-size: 20px;
     text-align: center;
     color: $primary-color;
@@ -371,11 +365,15 @@ $mobile-breakpoint: 800px;
     flex-wrap: row nowrap;
 }
 
-.home-page>img {
-    width: 100%;
-    -webkit-box-shadow: $box-shadow-opts;
-    -moz-box-shadow: $box-shadow-opts;
-    box-shadow: $box-shadow-opts;
+#home-page-header {
+    display: flex;
+    justify-content: center;
+}
+
+#home-page-header>img {
+    display: block;
+    height: 100px;
+    width: auto;
 }
 
 $action-banner-overflow: 20;
@@ -387,10 +385,18 @@ $action-banner-overflow: 20;
     padding-left: $action-banner-overflow + px;
     margin-right: -$action-banner-overflow + px;
     padding-right: $action-banner-overflow + px;
-    height: 200px;
+    height: 340px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.home-page>.action-banner>span {
+    color: whitesmoke;
+    text-align: center;
+    font-size: 26px;
+    max-width: 450px;
 }
 
 .social-banner {

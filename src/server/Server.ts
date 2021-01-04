@@ -24,36 +24,37 @@ async function main() {
     })
   );
 
-  // serve static resources
-  app.use(express.static(path.join(__dirname, "..", "client")));
+  // // serve static resources
+  // app.use(express.static(path.join(__dirname, "..", "client")));
 
-  // redirect to https
-  app.use((req, res, next) => {
-    if (
-      process.env.NODE_ENV === "production" &&
-      req.headers["x-forwarded-proto"] !== "https"
-    ) {
-      // the statement for performing our redirection
-      return res.redirect("https://" + req.headers.host + req.url);
-    } else {
-      return next();
-    }
-  });
+  // // redirect to https
+  // app.use((req, res, next) => {
+  //   if (
+  //     process.env.NODE_ENV === "production" &&
+  //     req.headers["x-forwarded-proto"] !== "https"
+  //   ) {
+  //     // the statement for performing our redirection
+  //     return res.redirect("https://" + req.headers.host + req.url);
+  //   } else {
+  //     return next();
+  //   }
+  // });
 
   app.get("/", (req, res) => {
-    console.log(process.env.NODE_ENV);
-    console.log("ergerg");
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+    console.log('kdsjfngkdjngf');
+    
+    // res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+    return res.redirect("https://dogz-4-life.square.site/");
   });
 
-  app.get("/api/customers/list", async (req, res) => {
-    try {
-      const customerList = await squareAPIControl.listCustomers();
-      res.send(customerList);
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  // app.get("/api/customers/list", async (req, res) => {
+  //   try {
+  //     const customerList = await squareAPIControl.listCustomers();
+  //     res.send(customerList);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
 
   // run http server (port 80)
   const httpServer = http.createServer(app);
