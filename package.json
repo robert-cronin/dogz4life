@@ -10,8 +10,12 @@
         "clsx": "^1.1.1",
         "concurrently": "^5.3.0",
         "cookie-parser": "^1.4.5",
+        "dotenv": "^8.2.0",
         "enquire-js": "^0.2.1",
+        "express-openid-connect": "^2.2.0",
         "express-session": "^1.17.1",
+        "passport": "^0.4.1",
+        "passport-auth0": "^1.4.0",
         "pg": "^8.5.1",
         "postcss-cli": "^8.3.1",
         "qrcode.react": "^1.0.0",
@@ -30,13 +34,15 @@
         "react-square-payment-form": "^0.7.2",
         "redux": "^4.0.5",
         "sqlite3": "^5.0.0",
-        "square": "^8.0.1",
+        "square": "^8.1.0",
         "web-vitals": "^0.2.4"
     },
     "devDependencies": {
         "@types/express": "^4.17.9",
         "@types/express-session": "^1.17.3",
         "@types/node": "^12.19.11",
+        "@types/passport": "^1.0.5",
+        "@types/passport-auth0": "^1.0.4",
         "@types/pg": "^7.14.7",
         "@types/react": "^16.14.2",
         "@types/react-dom": "^16.9.10",
@@ -63,10 +69,10 @@
     },
     "scripts": {
         "watch:webpack": "webpack --watch",
-        "watch:nodemon": "nodemon ./build/server/server.js --watch ./build",
+        "watch:nodemon": "nodemon -r dotenv/config ./build/server/server.js --watch ./build",
         "open-dev": "node ./scripts/open-dev.js",
         "dev": "concurrently \"npm:watch:*\" \"npm:open-dev\"",
-        "build": "webpack"
+        "build": "rm -rf ./build & webpack"
     },
     "browserslist": {
         "production": [

@@ -4,7 +4,8 @@ import {
   CreateCustomerRequest,
   Customer,
   Environment,
-  ListCustomersRequest,
+  ObtainTokenRequest,
+  ObtainTokenResponse,
 } from "square";
 
 class SquareAPIControl {
@@ -14,21 +15,41 @@ class SquareAPIControl {
   constructor() {
     this.client = new Client({
       timeout: 3000,
-      environment: Environment.Sandbox,
+      environment: Environment.Production,
       accessToken: process.env.SQUARE_ACCESS_TOKEN,
     });
 
     // Unique key to ensure this operation runs only once if you need to retry
   }
 
+  // async getAccessToken(code: string): Promise<ObtainTokenResponse> {
+  //   const body: ObtainTokenRequest = {
+  //     clientId: process.env.SQUARE_APPLICATION_ID,
+  //     clientSecret: process.env.SQUARE_APPLICATION_SECRET,
+  //     grantType: "authorization_code",
+  //     code
+  //   };
+
+  //   try {
+  //     const {
+  //       result,
+  //       ...httpResponse
+  //     } = await this.client.oAuthApi.obtainToken(body);
+  //     this.client.customersApi.(body);
+  //     // Get more response info...
+  //     const { statusCode, headers } = httpResponse;
+  //     return result
+  //   } catch (error) {
+  //     if (error instanceof ApiError) {
+  //       const errors = error.result;
+  //       const { statusCode, headers } = error;
+  //     }
+  //   }
+  // }
+
   // Call the API from within an async function
   async createCustomer(
-    request: CreateCustomerRequest = {
-      idempotencyKey: this.idempotencyKey, // Parameters use camel case
-      givenName: "Amelia",
-      familyName: "Earhart",
-      emailAddress: "Amelia.Earhart@aviators.com",
-    }
+    request: CreateCustomerRequest
   ) {
     // Use a try/catch statement to check if the response succeeded or failed
     try {
