@@ -58,12 +58,11 @@ class Server {
     // session
     this.app.use(
       session({
-        // TODO: change to env variable
         secret: process.env.EXPRESS_SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
         cookie: {
-          secure: true,
+          // secure: true,
         },
         store: new (FileStore(session))
       })
@@ -235,6 +234,7 @@ class Server {
   private secured(req: express.Request, res: express.Response, next: express.NextFunction) {
     console.log("secured");
     console.log(req);
+    console.log(req.user);
 
     if (req.user) {
       return next();
