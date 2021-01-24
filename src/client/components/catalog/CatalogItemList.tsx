@@ -4,6 +4,7 @@ import CatalogItem from "./CatalogItem";
 interface CatalogItemOptions {
   checked: boolean;
   title: string;
+  description: string;
   options: string[];
   selectedOptionIndex: number;
 }
@@ -17,6 +18,12 @@ interface CatalogItemListState {
 class CatalogItemList extends React.Component<any, CatalogItemListState> {
   constructor(props) {
     super(props);
+
+    this.state = {
+      error: "",
+      isLoaded: false,
+      items: [],
+    };
   }
 
   componentDidMount() {
@@ -24,14 +31,28 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
       .then((res) => res.json())
       .then(
         (result) => {
+          console.log(result);
+
           this.setState({
             isLoaded: true,
-            items: result.items.map((i) => {}),
+            items: result
+            .filter(i => {
+              return i.type == "ITEM"
+            })
+            .map(i => {
+              console.log(i);
+
+              const item: CatalogItemOptions = {
+                title: i.itemData?.name ?? "",
+                description: i.itemData?.description ?? "",
+                checked: true,
+                options: [],
+                selectedOptionIndex: 0,
+              };
+              return item;
+            }),
           });
         },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
         (error) => {
           this.setState({
             isLoaded: true,
@@ -45,11 +66,7 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
     return (
       <ul id="catalog-list">
         {this.state.items.map((itemOptions) => {
-          return (
-            <li>
-              <CatalogItem options={itemOptions} />
-            </li>
-          );
+          return <CatalogItem options={itemOptions} />;
         })}
       </ul>
     );

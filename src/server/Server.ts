@@ -203,7 +203,7 @@ class Server {
   }
 
   private setCatalogRoutes() {
-    this.app.get("/api/catalog/list", this.secured, async (req, res) => {
+    this.app.get("/api/catalog/list", async (req, res) => {
       const items = await this.squareAPIControl.listCatalog();
       res.send(JSON.stringify(items, undefined, 2));
     });

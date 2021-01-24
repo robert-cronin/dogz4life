@@ -12,7 +12,7 @@ class SquareAPIControl {
 
   constructor() {
     this.client = new Client({
-      timeout: 3000,
+      timeout: 100000,
       environment: Environment.Production,
       accessToken: process.env.SQUARE_ACCESS_TOKEN,
     });
@@ -52,8 +52,10 @@ class SquareAPIControl {
   // catalog
   async listCatalog() {
     try {
-      let { result } = await this.client.catalogApi.listCatalog();
+      const { result } = await this.client.catalogApi.listCatalog();
       console.log("API called successfully. Returned data: ", result);
+      console.log(result.objects);
+      
       return result.objects ?? [];
     } catch (error) {
       if (error instanceof ApiError) {

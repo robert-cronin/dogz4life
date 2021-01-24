@@ -27,3 +27,6 @@ yarn-error.log*
 
 # environment vars
 .env
+
+# sessions
+/sessions

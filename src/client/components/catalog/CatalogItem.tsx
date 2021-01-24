@@ -9,7 +9,8 @@ class CatalogItem extends React.Component<CatalogItemProps, any> {
   render() {
     return (
       <div className="catalog-item">
-        <p></p>
+        <p>{this.props.options.title}</p>
+        <div>${} - {}</div>
       </div>
     );
   }
