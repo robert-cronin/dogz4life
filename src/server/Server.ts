@@ -9,6 +9,7 @@ import passport from "passport";
 import querystring from "querystring";
 import session from "express-session";
 import Auth0Strategy from "passport-auth0";
+import FileStore from "session-file-store";
 import { auth } from "express-openid-connect";
 import SquareAPIControl from "./SquareAPIControl";
 
@@ -20,18 +21,22 @@ class Server {
     this.app = express();
     this.squareAPIControl = new SquareAPIControl();
 
-    // setting routes
+    // auth routes
     this.setupSession();
     this.setupPassport();
     this.setStaticRoutes();
-    this.setUserRoutes()
-    // this.setSquareRoutes();
+    this.setUserRoutes();
     this.setAuthorizationRoutes();
 
-    // redirection
-    // this.redirectToHttps();
-    // this.redirectToSquareSite();
+    // // // make user available in routes
+    // // this.app.use(this.userAvailable);
 
+    // square routes
+    this.setCatalogRoutes();
+
+    // // redirection
+    // // this.redirectToHttps();
+    // // this.redirectToSquareSite();
   }
 
   start() {
@@ -39,32 +44,17 @@ class Server {
     const httpServer = http.createServer(this.app);
     httpServer.listen(80, "0.0.0.0");
 
-    // // run https server (port 443)
-    // const key = fs.readFileSync(
-    //   "/etc/letsencrypt/live/dogz4life.com.au/privkey.pem"
-    // );
-    // const cert = fs.readFileSync(
-    //   "/etc/letsencrypt/live/dogz4life.com.au/cert.pem"
-    // );
-    // const httpsServer = https.createServer({ key, cert }, this.app);
-    // httpsServer.listen(443, "0.0.0.0");
+    // run https server (port 443)
+    // const sslPath = "/etc/letsencrypt/live/dogz4life.com.au";
+    const sslPath = path.resolve(__dirname, "../../tmp");
+
+    const key = fs.readFileSync(path.join(sslPath, "privkey.pem"));
+    const cert = fs.readFileSync(path.join(sslPath, "cert.pem"));
+    const httpsServer = https.createServer({ key, cert }, this.app);
+    httpsServer.listen(443, "0.0.0.0");
   }
 
   private setupSession() {
-    // auth router attaches /login, /logout, and /callback routes to the baseURL
-    this.app.use(
-      auth({
-        authRequired: false,
-        auth0Logout: true,
-        secret: process.env.AUTH0_CLIENT_SECRET,
-        baseURL: "http://localhost/api",
-        clientID: process.env.AUTH0_CLIENT_ID,
-        issuerBaseURL: "https://dev-h3edly4h.au.auth0.com",
-      })
-    );
-  }
-
-  private setupPassport() {
     // session
     this.app.use(
       session({
@@ -75,20 +65,35 @@ class Server {
         cookie: {
           secure: true,
         },
+        store: new (FileStore(session))
       })
     );
+    // auth router attaches /login, /logout, and /callback routes to the baseURL
+    this.app.use(
+      auth({
+        authRequired: false,
+        auth0Logout: true,
+        secret: process.env.AUTH0_CLIENT_SECRET,
+        baseURL: "https://localhost/",
+        clientID: process.env.AUTH0_CLIENT_ID,
+        issuerBaseURL: "https://dev-h3edly4h.au.auth0.com",
+      })
+    );
+  }
 
+  private setupPassport() {
     // security
     // Configure Passport to use Auth0
     const strategy = new Auth0Strategy(
       {
         domain: process.env.AUTH0_DOMAIN,
+        state: false,
         clientID: process.env.AUTH0_CLIENT_ID,
         clientSecret: process.env.AUTH0_CLIENT_SECRET,
         callbackURL:
-          process.env.AUTH0_CALLBACK_URL || "http://localhost/api/callback",
+          process.env.AUTH0_CALLBACK_URL || "https://localhost/callback",
       },
-      function (accessToken, refreshToken, extraParams, profile, done) {
+      (accessToken, refreshToken, extraParams, profile, done) => {
         // accessToken is the token to call Auth0 API (not needed in the most cases)
         // extraParams.id_token has the JSON Web Token
         // profile has all the information from the user
@@ -99,10 +104,10 @@ class Server {
     this.app.use(passport.initialize());
     this.app.use(passport.session());
     // You can use this section to keep a smaller payload
-    passport.serializeUser(function (user, done) {
+    passport.serializeUser((user, done) => {
       done(null, user);
     });
-    passport.deserializeUser(function (user, done) {
+    passport.deserializeUser((user, done) => {
       done(null, user);
     });
   }
@@ -113,12 +118,25 @@ class Server {
   }
 
   private setAuthorizationRoutes() {
-    // Perform the final stage of authentication and redirect to previously requested URL or '/user'
-    this.app.get("/api/callback", (req, res, next) => {
-      console.log('sdkfjngskjfng');
-      console.log('rrrrrrrrr');
-      
+    // Perform the login, after login Auth0 will redirect to callback
+    this.app.get(
+      "/login",
+      passport.authenticate("auth0", {
+        scope: "openid email profile",
+      }),
+      (req, res) => {
+        res.redirect("/");
+      }
+    );
+
+    this.app.use("/callback", (req, res, next) => {
+      console.log("ejuhrgbjuehbgruehrbgjuehgbr");
+      res.send("skdjfnksjndf");
+
       passport.authenticate("auth0", (err, user, info) => {
+        console.log("auth0");
+        console.log("skdfjngjksnrtfgikswjtfnrghjsrdtgh");
+
         if (err) {
           return next(err);
         }
@@ -139,7 +157,6 @@ class Server {
     // Perform session logout and redirect to homepage
     this.app.get("/logout", (req, res) => {
       req.logout();
-
       let returnTo = req.protocol + "://" + req.hostname;
       const port = req.connection.localPort;
       if (port !== undefined && port !== 80 && port !== 443) {
@@ -156,59 +173,40 @@ class Server {
 
       res.redirect(logoutURL.toString());
     });
-
-    // Perform the login, after login Auth0 will redirect to callback
-    this.app.get(
-      "/login",
-      passport.authenticate("auth0", {
-        scope: "openid email profile",
-      }),
-      (req, res) => {
-        res.redirect("/");
-      }
-    );
-
-    // this.app.get("/api/login", async (req, res) => {
-    //   try {
-    //     res.redirect(
-    //       `https://squareup.com/oauth2/authorize?client_id=${process.env.SQUARE_APPLICATION_ID}`
-    //     );
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // });
-
-    // this.app.post("/api/callback", async (req, res) => {
-    //   try {
-    //     console.log(req.body);
-
-    //     console.log("skjdnfksjdnf");
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // });
   }
 
   private setUserRoutes() {
     /* GET user profile. */
     this.app.get("/user", this.secured, (req, res, next) => {
       const { _raw, _json, ...userProfile } = req.user as any;
-      res.render("user", {
-        userProfile: JSON.stringify(userProfile, null, 2),
-        title: "Profile page",
+      res.send(JSON.stringify(userProfile, null, 2));
+    });
+
+    // POST new user
+    this.app.get("/user/new", this.secured, async (req, res, next) => {
+      const { _raw, _json, ...userProfile } = req.user as any;
+      const {
+        name: { familyName, givenName },
+        emails,
+        nickname,
+        user_id,
+        ...rest
+      } = userProfile;
+      const response = await this.squareAPIControl.createCustomer({
+        givenName,
+        familyName,
+        nickname,
+        referenceId: user_id,
+        emailAddress: emails[0].value,
       });
+      res.send(JSON.stringify(response, null, 2));
     });
   }
 
-  private setSquareRoutes() {
-    this.app.get("/api/login/authorization", async (req, res) => {
-      const code = req.query.code as string;
-      try {
-        // const accessToken = await this.squareAPIControl.getAccessToken(code);
-        // res.send(accessToken);
-      } catch (error) {
-        console.log(error);
-      }
+  private setCatalogRoutes() {
+    this.app.get("/api/catalog/list", this.secured, async (req, res) => {
+      const items = await this.squareAPIControl.listCatalog();
+      res.send(JSON.stringify(items, undefined, 2));
     });
   }
 
@@ -234,11 +232,14 @@ class Server {
   }
 
   // ====== Helper Methods ====== //
-  private secured(req, res, next) {
+  private secured(req: express.Request, res: express.Response, next: express.NextFunction) {
+    console.log("secured");
+    console.log(req);
+
     if (req.user) {
       return next();
     }
-    req.session.returnTo = req.originalUrl;
+    req.session["returnTo"] = req.originalUrl;
     res.redirect("/login");
   }
 }

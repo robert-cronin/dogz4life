@@ -1,4 +1,5 @@
 const path = require("path");
+// const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -11,6 +12,9 @@ const serverConfig = {
     path: path.resolve(__dirname, "build", "server"),
     filename: "server.js",
   },
+  // plugins: [
+  //   new Dotenv()
+  // ],
   devtool: "source-map",
   resolve: {
     extensions: [".ts", ".js"],
@@ -36,7 +40,7 @@ const serverConfig = {
 const clientConfig = {
   entry: "./src/client/index.tsx",
   target: "web",
-  mode: "development",
+  mode: "production",
   output: {
     path: path.resolve(__dirname, "build", "client"),
     filename: "bundle.js",

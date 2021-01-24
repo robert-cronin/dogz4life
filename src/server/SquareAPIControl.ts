@@ -4,13 +4,11 @@ import {
   CreateCustomerRequest,
   Customer,
   Environment,
-  ObtainTokenRequest,
-  ObtainTokenResponse,
 } from "square";
 
 class SquareAPIControl {
   client: Client;
-  idempotencyKey = "unique_key";
+  idempotencyKey = process.env.SQUARE_IDEMPOTENCY_KEY;
 
   constructor() {
     this.client = new Client({
@@ -22,39 +20,12 @@ class SquareAPIControl {
     // Unique key to ensure this operation runs only once if you need to retry
   }
 
-  // async getAccessToken(code: string): Promise<ObtainTokenResponse> {
-  //   const body: ObtainTokenRequest = {
-  //     clientId: process.env.SQUARE_APPLICATION_ID,
-  //     clientSecret: process.env.SQUARE_APPLICATION_SECRET,
-  //     grantType: "authorization_code",
-  //     code
-  //   };
-
-  //   try {
-  //     const {
-  //       result,
-  //       ...httpResponse
-  //     } = await this.client.oAuthApi.obtainToken(body);
-  //     this.client.customersApi.(body);
-  //     // Get more response info...
-  //     const { statusCode, headers } = httpResponse;
-  //     return result
-  //   } catch (error) {
-  //     if (error instanceof ApiError) {
-  //       const errors = error.result;
-  //       const { statusCode, headers } = error;
-  //     }
-  //   }
-  // }
-
   // Call the API from within an async function
-  async createCustomer(
-    request: CreateCustomerRequest
-  ) {
+  async createCustomer(request: CreateCustomerRequest) {
     // Use a try/catch statement to check if the response succeeded or failed
     try {
-      let { result } = await this.client.customersApi.createCustomer(request);
-      console.log("API called successfully. Returned data: ", result);
+      const { result } = await this.client.customersApi.createCustomer(request);
+      return result
     } catch (error) {
       if (error instanceof ApiError) {
         console.log("Errors: ", error.errors);
@@ -71,6 +42,23 @@ class SquareAPIControl {
       return result.customers ?? [];
     } catch (error) {
       if (error instanceof ApiError) {
+        throw Error(`Errors: ${error.errors}`);
+      } else {
+        throw Error(`Unexpected Error: ${error}`);
+      }
+    }
+  }
+
+  // catalog
+  async listCatalog() {
+    try {
+      let { result } = await this.client.catalogApi.listCatalog();
+      console.log("API called successfully. Returned data: ", result);
+      return result.objects ?? [];
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.log(error.errors.forEach(e => console.log(e)));
+        
         throw Error(`Errors: ${error.errors}`);
       } else {
         throw Error(`Unexpected Error: ${error}`);
