@@ -1,46 +1,11 @@
-const path = require("path");
-// const Dotenv = require('dotenv-webpack');
-const CopyPlugin = require("copy-webpack-plugin");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-const serverConfig = {
-  name: "server",
-  entry: "./src/server/Server.ts",
-  mode: "production",
-  output: {
-    path: path.resolve(__dirname, "build", "server"),
-    filename: "server.js",
-  },
-  // plugins: [
-  //   new Dotenv()
-  // ],
-  devtool: "source-map",
-  resolve: {
-    extensions: [".ts", ".js"],
-  },
-  target: "node",
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        exclude: [/node_modules/],
-        loader: "ts-loader",
-      },
-    ],
-  },
-  watchOptions: {
-    ignored: /node_modules/,
-  },
-  optimization: {
-    minimize: false,
-  },
-};
+import fs from "fs";
+import path from "path";
+import CopyPlugin from "copy-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 
 const clientConfig = {
   entry: "./src/client/index.tsx",
   target: "web",
-  mode: "production",
   output: {
     path: path.resolve(__dirname, "build", "client"),
     filename: "bundle.js",
@@ -96,12 +61,27 @@ const clientConfig = {
     }),
     new CopyPlugin({
       patterns: [
-        {from: "./src/client/static/favicon.ico", to: "."},
-        {from: "./src/client/static/robots.txt", to: "."},
-        {from: "./src/client/static/manifest.json", to: "."},
-      ]
-    })
+        { from: "./src/client/static/favicon.ico", to: "." },
+        { from: "./src/client/static/robots.txt", to: "." },
+        { from: "./src/client/static/manifest.json", to: "." },
+      ],
+    }),
   ],
+  devServer: {
+    contentBase: path.resolve(
+      __dirname,
+      "src",
+      "client",
+      "static",
+      "index.html"
+    ),
+    compress: true,
+    port: 9000,
+    hot: true,
+    https: true,
+    key: fs.readFileSync('./tmp/privkey.pem'),
+    cert: fs.readFileSync('./tmp/cert.pem'),
+  },
 };
 
-module.exports = [serverConfig, clientConfig];
+module.exports = [clientConfig];

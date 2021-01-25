@@ -30,16 +30,22 @@ class NewBooking extends React.Component {
 
   steps = [
     {
-      title: "Catalog",
+      title: "Select Service",
       content: <CatalogItemList />,
-    }
+    },
+    {
+      title: "Select Servi",
+      content: <CatalogItemList />,
+    },
   ];
 
   render() {
+    console.log("NODE_ENV")
+    console.log(process.env.NODE_ENV)
     return (
       <Card
-        title="New Client Form"
-        id="new-client-form-card"
+        title="New Booking"
+        id="new-booking-form-card"
         actions={[
           this.state.current < this.steps.length - 1 && (
             <Button type="primary" onClick={() => this.next()}>
@@ -65,20 +71,27 @@ class NewBooking extends React.Component {
       >
         <Form
           name="basic"
-          layout="vertical"
+          layout="horizontal"
           size="middle"
           initialValues={{ remember: true }}
           onFinish={this.onFinish}
           onFinishFailed={this.onFinishFailed}
         >
-          <Steps current={this.state.current}>
-            {this.steps.map((item) => (
-              <Step key={item.title} title={item.title} />
-            ))}
-          </Steps>
-          <br />
-          <div className="steps-content">
-            {this.steps[this.state.current].content}
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <div>
+              <Steps direction="vertical" current={this.state.current}>
+                {this.steps.map((item) => (
+                  <Step key={item.title} title={item.title} />
+                ))}
+              </Steps>
+            </div>
+            <div className="steps-content">
+              {this.steps[this.state.current].content}
+            </div>
           </div>
         </Form>
       </Card>
