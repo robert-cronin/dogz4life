@@ -1,14 +1,7 @@
 import React from "react";
-import Banner from "../components/Banner";
-import Logo from "../static/dogz4lifelogo.jpg";
-import Bella from "../static/bella.jpg";
-import Benni from "../static/benni-silly.jpg";
-import { Layout, BackTop, Row, Col, Image, List, Button } from "antd";
-import {
-  CalendarOutlined,
-  CaretDownOutlined,
-} from "@ant-design/icons";
-const { Header, Footer, Content } = Layout;
+import { Layout } from "antd";
+import BrownDog from "../static/brown-dog.jpg";
+import FluffyDog from "../static/fluffy-dog.jpg";
 
 class AboutUs extends React.Component {
   state = {
@@ -48,121 +41,86 @@ class AboutUs extends React.Component {
       "2. Bring your puppy on the selected date",
       "3. Come back when they're ready!",
     ];
+
+    const imageSize = "30vw";
     return (
-      <>
-        <Banner odd style={{ height: "100%" }}>
-          <Row
-            gutter={[24, 0]}
-            style={{ height: "100%", position: "relative" }}
-            justify="space-around"
-            align="middle"
+      <div>
+        <div
+          style={{
+            height: imageSize,
+            width: "100%",
+            padding: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundImage: `url(${FluffyDog})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              height: "100%",
+              width: imageSize,
+            }}
+          />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              textAlign: "left",
+              maxWidth: "500px",
+              paddingLeft: "80px",
+              fontSize: "20px",
+            }}
           >
-            <Col
-              span={12}
-              style={{
-                textAlign: "center",
-              }}
-            >
-              <p className="text-4xl font-mono">Dogs for life</p>
-              <p className="text-2xl font-mono">Your dog deserves the best.</p>
-              <Button type="primary" icon={<CalendarOutlined />}>
-                Book Now
-              </Button>
-            </Col>
-            <Col
-              span={12}
-              style={{
-                height: "100%",
-                backgroundImage: `url(${Logo})`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-              }}
-            />
-            <Button
-              style={{
-                position: "absolute",
-                bottom: "20px",
-                zIndex: 1,
-                borderRadius: "200px",
-              }}
-              icon={<CaretDownOutlined />}
-            ></Button>
-          </Row>
-        </Banner>
-        <Banner even style={{ height: "100%" }}>
-          <Row
-            gutter={[24, 0]}
-            style={{ height: "100%" }}
-            justify="space-around"
-            align="middle"
+            <h1>Enrichment is Our Main Focus</h1>
+            <p>
+              We're proud to offer services that enrich your fury friend's life
+              and give them the occasional pampering that they deserve.
+            </p>
+          </div>
+        </div>
+        <div
+          style={{
+            height: imageSize,
+            width: "100%",
+            padding: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              textAlign: "left",
+              maxWidth: "500px",
+              paddingRight: "80px",
+              fontSize: "20px",
+            }}
           >
-            <Col
-              span={12}
-              style={{
-                height: "100%",
-                backgroundImage: `url(${Bella})`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-              }}
-            />
-            <Col
-              span={12}
-              style={{
-                textAlign: "center",
-              }}
-            >
-              <p className="text-5xl font-mono">
-                Take care of your pet in 3 simple steps
-              </p>
-              <List
-                dataSource={threeSteps}
-                renderItem={(item) => (
-                  <List.Item>
-                    <p className="text-xl font-mono">{item}</p>
-                  </List.Item>
-                )}
-              />
-            </Col>
-          </Row>
-        </Banner>
-        <Banner odd style={{ height: "100%" }}>
-          <Row
-            gutter={[24, 0]}
-            style={{ height: "100%" }}
-            justify="space-around"
-            align="middle"
-          >
-            <Col
-              span={12}
-              style={{
-                textAlign: "center",
-              }}
-            >
-              <p className="text-4xl font-mono">
-                We love your pets as much as you do!
-              </p>
-              <p className="text-2xl font-mono">
-                Treat your best friend with a groom or massage, up their skills
-                with a training session or get a tailoured nutrition plan.
-              </p>
-            </Col>
-            <Col
-              span={12}
-              style={{
-                height: "100%",
-                backgroundImage: `url(${Benni})`,
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "cover",
-              }}
-            />
-          </Row>
-        </Banner>
-        <Banner even></Banner>
-        <Banner odd></Banner>
-      </>
+            <h1>From Our Family to Yours</h1>
+            <p>
+              Our fury friends are a part of our family. As dog owners, we pride
+              ourselves on giving your dog the love and attention that you give
+              them. Each groom and training session is done with your pet's
+              comfort level in mind.
+            </p>
+          </div>
+          <div
+            style={{
+              backgroundImage: `url(${BrownDog})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+              backgroundSize: "cover",
+              height: "100%",
+              width: imageSize,
+            }}
+          />
+        </div>
+      </div>
     );
   }
 }
