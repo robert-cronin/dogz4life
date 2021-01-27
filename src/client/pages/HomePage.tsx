@@ -55,6 +55,8 @@ class HomePage extends React.Component {
           <div
             className="action-banner"
             style={{
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
               backgroundImage: `url(${TwoDogs})`,
             }}
           >

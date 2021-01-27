@@ -1,2 +1,2 @@
 const open = require("open")
-open("https://localhost:9000")
+open("https://localhost")

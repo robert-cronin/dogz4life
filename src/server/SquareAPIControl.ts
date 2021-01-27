@@ -4,6 +4,7 @@ import {
   CreateCustomerRequest,
   Customer,
   Environment,
+  SearchAvailabilityRequest,
 } from "square";
 
 class SquareAPIControl {
@@ -25,7 +26,7 @@ class SquareAPIControl {
     // Use a try/catch statement to check if the response succeeded or failed
     try {
       const { result } = await this.client.customersApi.createCustomer(request);
-      return result
+      return result;
     } catch (error) {
       if (error instanceof ApiError) {
         console.log("Errors: ", error.errors);
@@ -50,17 +51,42 @@ class SquareAPIControl {
   }
 
   // catalog
+  catalogCache?: any;
   async listCatalog() {
+    if (this.catalogCache) {
+      return this.catalogCache;
+    }
     try {
       const { result } = await this.client.catalogApi.listCatalog();
       console.log("API called successfully. Returned data: ", result);
       console.log(result.objects);
-      
-      return result.objects ?? [];
+      this.catalogCache = result.objects ?? [];
+      return this.catalogCache;
     } catch (error) {
       if (error instanceof ApiError) {
-        console.log(error.errors.forEach(e => console.log(e)));
-        
+        console.log(error.errors.forEach((e) => console.log(e)));
+
+        throw Error(`Errors: ${error.errors}`);
+      } else {
+        throw Error(`Unexpected Error: ${error}`);
+      }
+    }
+  }
+
+  // booking
+  async listBookingAvailability(req: SearchAvailabilityRequest) {
+    try {
+      const { result } = await this.client.bookingsApi.searchAvailability(req);
+      if (result.errors) {
+        throw result.errors;
+      }
+      console.log("API called successfully. Returned data: ", result);
+      console.log(result.availabilities);
+      return result.availabilities ?? [];
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.log(error.errors.forEach((e) => console.log(e)));
+
         throw Error(`Errors: ${error.errors}`);
       } else {
         throw Error(`Unexpected Error: ${error}`);

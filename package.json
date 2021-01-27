@@ -71,8 +71,9 @@
         "webpack-dev-server": "^3.11.2"
     },
     "scripts": {
-        "watch:client": "webpack-dev-server --mode development --config ./webpack.config.client.ts",
-        "watch:server": "webpack --watch --config ./webpack.config.server.ts",
+        "webpack-dev-server": "webpack-dev-server --mode development --config ./webpack.config.client.ts",
+        "watch:client": "webpack --watch --mode development --config ./webpack.config.client.ts",
+        "watch:server": "webpack --watch --mode development --config ./webpack.config.server.ts",
         "watch:nodemon": "nodemon -r dotenv/config ./build/server/server.js --watch ./build",
         "open-dev": "node ./scripts/open-dev.js",
         "dev": "concurrently \"npm:watch:*\" \"npm:open-dev\"",

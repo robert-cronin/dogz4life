@@ -19,6 +19,7 @@ class Server {
 
   constructor() {
     this.app = express();
+    this.app.use(express.json());
     this.squareAPIControl = new SquareAPIControl();
 
     // auth routes
@@ -32,7 +33,7 @@ class Server {
     // // this.app.use(this.userAvailable);
 
     // square routes
-    this.setCatalogRoutes();
+    this.setBookingRoutes();
 
     // // redirection
     // // this.redirectToHttps();
@@ -64,7 +65,7 @@ class Server {
         cookie: {
           // secure: true,
         },
-        store: new (FileStore(session))
+        store: new (FileStore(session))(),
       })
     );
     // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -202,9 +203,30 @@ class Server {
     });
   }
 
-  private setCatalogRoutes() {
+  private setBookingRoutes() {
     this.app.get("/api/catalog/list", async (req, res) => {
       const items = await this.squareAPIControl.listCatalog();
+      res.send(JSON.stringify(items, undefined, 2));
+    });
+    this.app.post("/api/booking/availability", async (req, res) => {
+      const filter = req.body;
+      console.log(filter);
+
+      const items = await this.squareAPIControl.listBookingAvailability({
+        query: {
+          filter: {
+            startAtRange: {
+              startAt: filter.startAt,
+              endAt: filter.endAt,
+            },
+            locationId: filter.locationId,
+            segmentFilters:[{ serviceVariationId:"BOF3BWZAUZ4MWNPI25YU7YOL" }]
+            // segmentFilters: filter.segmentFilters.map((s) => {
+            //   return { serviceVariationId: s.serviceVariationId };
+            // }),
+          },
+        },
+      });
       res.send(JSON.stringify(items, undefined, 2));
     });
   }
@@ -231,7 +253,11 @@ class Server {
   }
 
   // ====== Helper Methods ====== //
-  private secured(req: express.Request, res: express.Response, next: express.NextFunction) {
+  private secured(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     console.log("secured");
     console.log(req);
     console.log(req.user);

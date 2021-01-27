@@ -2,6 +2,7 @@ import React from "react";
 import CatalogItem from "./CatalogItem";
 
 interface CatalogItemOptions {
+  id: string;
   checked: boolean;
   title: string;
   description: string;
@@ -43,9 +44,10 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
               console.log(i);
 
               const item: CatalogItemOptions = {
+                id: i.id ?? "",
                 title: i.itemData?.name ?? "",
                 description: i.itemData?.description ?? "",
-                checked: true,
+                checked: false,
                 options: [],
                 selectedOptionIndex: 0,
               };
@@ -66,7 +68,14 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
     return (
       <ul id="catalog-list">
         {this.state.items.map((itemOptions) => {
-          return <CatalogItem options={itemOptions} />;
+          return <CatalogItem options={itemOptions} onCheckboxClick={(id) => {
+            const index = this.state.items.findIndex(v => v.id == id)
+            const item = {...this.state.items[index]}
+            item.checked = !item.checked
+            this.setState({
+              items: [...this.state.items.slice(undefined, index), item, ...this.state.items.slice(index+1)]
+            })
+          }} />;
         })}
       </ul>
     );

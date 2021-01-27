@@ -1,6 +1,7 @@
 import React from "react";
 import { Steps, Button, message, Card, Form, Space } from "antd";
 import CatalogItemList from "../components/catalog/CatalogItemList";
+import BookingCalendar from "../components/booking-calendar/BookingCalendar";
 const { Step } = Steps;
 
 class NewBooking extends React.Component {
@@ -34,7 +35,11 @@ class NewBooking extends React.Component {
       content: <CatalogItemList />,
     },
     {
-      title: "Select Servi",
+      title: "Select date and time",
+      content: <BookingCalendar />,
+    },
+    {
+      title: "Enter your details",
       content: <CatalogItemList />,
     },
   ];
