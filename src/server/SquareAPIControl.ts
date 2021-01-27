@@ -77,9 +77,6 @@ class SquareAPIControl {
   async listBookingAvailability(req: SearchAvailabilityRequest) {
     try {
       const { result } = await this.client.bookingsApi.searchAvailability(req);
-      if (result.errors) {
-        throw result.errors;
-      }
       console.log("API called successfully. Returned data: ", result);
       console.log(result.availabilities);
       return result.availabilities ?? [];
