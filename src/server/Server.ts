@@ -11,16 +11,19 @@ import session from "express-session";
 import Auth0Strategy from "passport-auth0";
 import FileStore from "session-file-store";
 import { auth } from "express-openid-connect";
+import ContactManager from "./ContactManager";
 import SquareAPIControl from "./SquareAPIControl";
 
 class Server {
   app: express.Express;
+  contactManager: ContactManager;
   squareAPIControl: SquareAPIControl;
-
+  
   constructor() {
     this.app = express();
     this.app.use(express.json());
-    this.squareAPIControl = new SquareAPIControl();
+    this.contactManager = new ContactManager
+    this.squareAPIControl = new SquareAPIControl;
 
     // auth routes
     this.setupSession();
@@ -34,6 +37,9 @@ class Server {
 
     // square routes
     this.setBookingRoutes();
+
+    // contact us route
+    this.setContactUsRoute()
 
     // // redirection
     // // this.redirectToHttps();
@@ -233,6 +239,14 @@ class Server {
         },
       });
       res.send(JSON.stringify(items, undefined, 2));
+    });
+  }
+
+  private setContactUsRoute() {
+    this.app.get("/api/contact_us", async (req, res) => {
+      const {fromEmail, name, message} = req.body;
+      const info = await this.contactManager.sendContactMail(fromEmail, name, message);
+      res.send(JSON.stringify(info, undefined, 2));
     });
   }
 

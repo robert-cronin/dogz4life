@@ -1,6 +1,5 @@
 import React from "react";
 import { Form, Input, Button } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
 
 interface ContactFormState {
   name: string;
