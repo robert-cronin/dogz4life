@@ -78,7 +78,6 @@ class SquareAPIControl {
     try {
       const { result } = await this.client.bookingsApi.searchAvailability(req);
       console.log("API called successfully. Returned data: ", result);
-      console.log(result.availabilities);
       return result.availabilities ?? [];
     } catch (error) {
       if (error instanceof ApiError) {

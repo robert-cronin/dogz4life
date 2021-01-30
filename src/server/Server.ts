@@ -222,19 +222,13 @@ class Server {
         query: {
           filter: {
             startAtRange: {
-              startAt: "2021-01-27T21:23:34.409Z",
-              endAt: "2021-01-27T21:23:34.409Z",
-              // startAt: filter.startAt,
-              // endAt: filter.endAt,
+              startAt: filter.startAt,
+              endAt: filter.endAt,
             },
-            locationId: "LMQY4941CGM9H",
-            // locationId: filter.locationId,
-            segmentFilters: [
-              { serviceVariationId: "BOF3BWZAUZ4MWNPI25YU7YOL" },
-            ],
-            // segmentFilters: filter.segmentFilters.map((s) => {
-            //   return { serviceVariationId: s.serviceVariationId };
-            // }),
+            locationId: filter.locationId,
+            segmentFilters: filter.segmentFilters.map((s) => {
+              return { serviceVariationId: s.serviceVariationId };
+            }),
           },
         },
       });

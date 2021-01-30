@@ -12,7 +12,7 @@ interface CatalogItemOptions {
 
 interface CatalogItemListState {
   isLoaded: boolean;
-  items: CatalogItemOptions[];
+  options: CatalogItemOptions[];
   error: string;
 }
 
@@ -23,7 +23,7 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
     this.state = {
       error: "",
       isLoaded: false,
-      items: [],
+      options: [],
     };
   }
 
@@ -36,7 +36,7 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
 
           this.setState({
             isLoaded: true,
-            items: result
+            options: result
             .filter(i => {
               return i.type == "ITEM"
             })
@@ -67,13 +67,13 @@ class CatalogItemList extends React.Component<any, CatalogItemListState> {
   render() {
     return (
       <ul id="catalog-list">
-        {this.state.items.map((itemOptions) => {
+        {this.state.options.map((itemOptions) => {
           return <CatalogItem options={itemOptions} onCheckboxClick={(id) => {
-            const index = this.state.items.findIndex(v => v.id == id)
-            const item = {...this.state.items[index]}
+            const index = this.state.options.findIndex(v => v.id == id)
+            const item = {...this.state.options[index]}
             item.checked = !item.checked
             this.setState({
-              items: [...this.state.items.slice(undefined, index), item, ...this.state.items.slice(index+1)]
+              options: [...this.state.options.slice(undefined, index), item, ...this.state.options.slice(index+1)]
             })
           }} />;
         })}

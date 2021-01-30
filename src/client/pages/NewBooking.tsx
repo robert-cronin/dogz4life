@@ -4,7 +4,10 @@ import CatalogItemList from "../components/catalog/CatalogItemList";
 import BookingCalendar from "../components/booking-calendar/BookingCalendar";
 const { Step } = Steps;
 
-class NewBooking extends React.Component {
+interface NewBookingState {
+}
+
+class NewBooking extends React.Component<any, NewBookingState> {
   state = {
     current: 0,
   };
@@ -45,8 +48,8 @@ class NewBooking extends React.Component {
   ];
 
   render() {
-    console.log("NODE_ENV")
-    console.log(process.env.NODE_ENV)
+    console.log("NODE_ENV");
+    console.log(process.env.NODE_ENV);
     return (
       <Card
         title="New Booking"
