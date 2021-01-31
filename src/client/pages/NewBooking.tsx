@@ -1,16 +1,94 @@
 import React from "react";
-import { Steps, Button, message, Card, Form, Space } from "antd";
+import moment from "moment";
+import { Steps, Button, message, Card, Form } from "antd";
 import CatalogItemList from "../components/catalog/CatalogItemList";
 import BookingCalendar from "../components/booking-calendar/BookingCalendar";
 const { Step } = Steps;
 
+interface CatalogItemVariation {
+  id: string;
+  name: string;
+  price: {
+    amount: number;
+    currency: string;
+  };
+  duration: moment.Moment;
+}
+
+interface CatalogItemData {
+  id: string;
+  checked: boolean;
+  name: string;
+  description: string;
+  variations: CatalogItemVariation[];
+  selectedVariationId?: number;
+}
+
 interface NewBookingState {
+  options: CatalogItemData[];
+  selectedOptions: { itemId: string; variationId: string }[];
+  current: number;
+  isLoading: boolean;
+  error: string;
 }
 
 class NewBooking extends React.Component<any, NewBookingState> {
   state = {
+    options: [],
+    selectedOptions: [],
     current: 0,
+    isLoading: false,
+    error: "",
   };
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+    fetch("/api/catalog/list")
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            isLoading: false,
+            options: result
+              .filter((i) => {
+                return i.type == "ITEM";
+              })
+              .map((i) => {
+                console.log(i);
+
+                const variationData = i.itemData?.variations;
+                const item: CatalogItemData = {
+                  id: i.id ?? "",
+                  name: i.itemData?.name ?? "",
+                  description: i.itemData?.description ?? "",
+                  checked: false,
+                  variations: variationData.map((v) => {
+                    const variation: CatalogItemVariation = {
+                      id: v.id,
+                      name: v.name,
+                      price: {
+                        amount: v.itemVariationData.priceMoney.amount,
+                        currency: v.itemVariationData.priceMoney.currency,
+                      },
+                      duration: moment(
+                        new Date(v.itemVariationData.serviceDuration as number)
+                      ),
+                    };
+                    return variation;
+                  }),
+                };
+                return item;
+              }),
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoading: false,
+            error,
+          });
+        }
+      );
+  }
 
   next() {
     this.setState({
@@ -39,7 +117,11 @@ class NewBooking extends React.Component<any, NewBookingState> {
     },
     {
       title: "Select date and time",
-      content: <BookingCalendar />,
+      content: (
+        <BookingCalendar
+          serviceVariationIdList={this.state.serviceVariationIdList}
+        />
+      ),
     },
     {
       title: "Enter your details",
@@ -108,3 +190,4 @@ class NewBooking extends React.Component<any, NewBookingState> {
 }
 
 export default NewBooking;
+export { CatalogItemData, CatalogItemVariation };

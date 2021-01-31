@@ -1,9 +1,9 @@
 import React from "react";
 import { Checkbox, Select } from "antd";
-import { CatalogItemOptions } from "./CatalogItemList";
+import { CatalogItemData } from "../../pages/NewBooking";
 
 interface CatalogItemProps {
-  options: CatalogItemOptions;
+  options: CatalogItemData;
   onCheckboxClick: (id: string) => void;
 }
 
@@ -25,7 +25,7 @@ class CatalogItem extends React.Component<CatalogItemProps, any> {
         }}
       >
         <div>
-          <p>{this.props.options.title}</p>
+          <p>{this.props.options.name}</p>
           <div>
             ${} - {}
           </div>
