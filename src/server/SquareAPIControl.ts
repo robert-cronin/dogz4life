@@ -51,17 +51,12 @@ class SquareAPIControl {
   }
 
   // catalog
-  catalogCache?: any;
   async listCatalog() {
-    if (this.catalogCache) {
-      return this.catalogCache;
-    }
     try {
       const { result } = await this.client.catalogApi.listCatalog();
       console.log("API called successfully. Returned data: ", result);
       console.log(result.objects);
-      this.catalogCache = result.objects ?? [];
-      return this.catalogCache;
+      return result.objects ?? [];
     } catch (error) {
       if (error instanceof ApiError) {
         console.log(error.errors.forEach((e) => console.log(e)));

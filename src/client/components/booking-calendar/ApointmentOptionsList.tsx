@@ -12,7 +12,11 @@ class ApointmentOptionsList extends React.Component<
   any
 > {
   render() {
-    if (!this.props.options) {
+    console.log('heyyyy');
+    console.log(this.props.options);
+    console.log('heyyyy');
+    
+    if (this.props.options.length == 0) {
       return (
         <div>
           <h2>{this.props.timeOfDay}</h2>

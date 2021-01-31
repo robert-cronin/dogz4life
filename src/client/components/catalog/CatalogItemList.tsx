@@ -5,9 +5,7 @@ import { CatalogItemData, CatalogItemVariation } from "../../pages/NewBooking";
 
 interface CatalogItemListProps {
   options: CatalogItemData[];
-  setSelectedOptions: () => {
-    
-  }
+  selectOption: (itemId: string, variationId?: string) => void
 }
 
 interface CatalogItemListState {
@@ -17,12 +15,9 @@ class CatalogItemList extends React.Component<
   CatalogItemListProps,
   CatalogItemListState
 > {
-  state = {
-    error: "",
-    isLoaded: false,
-  };
-
-  
+  constructor(props) {
+    super(props)
+  }
 
   render() {
     return (
@@ -30,19 +25,9 @@ class CatalogItemList extends React.Component<
         {this.props.options.map((itemOptions) => {
           return (
             <CatalogItem
-              options={itemOptions}
-              onCheckboxClick={(id) => {
-                const index = this.props.options.findIndex((v) => v.id == id);
-                const item = { ...this.props.options[index] };
-                item.checked = !item.checked;
-                this.setState({
-                  options: [
-                    ...this.props.options.slice(undefined, index),
-                    item,
-                    ...this.props.options.slice(index + 1),
-                  ],
-                });
-              }}
+              option={itemOptions}
+              onCheckboxClick={(id: string) => this.props.selectOption(id)}
+              onVariationSelect={(id: string, variationId: string) => this.props.selectOption(id, variationId)}
             />
           );
         })}

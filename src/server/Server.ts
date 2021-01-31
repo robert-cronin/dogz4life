@@ -18,12 +18,12 @@ class Server {
   app: express.Express;
   contactManager: ContactManager;
   squareAPIControl: SquareAPIControl;
-  
+
   constructor() {
     this.app = express();
     this.app.use(express.json());
-    this.contactManager = new ContactManager
-    this.squareAPIControl = new SquareAPIControl;
+    this.contactManager = new ContactManager();
+    this.squareAPIControl = new SquareAPIControl();
 
     // auth routes
     this.setupSession();
@@ -39,7 +39,7 @@ class Server {
     this.setBookingRoutes();
 
     // contact us route
-    this.setContactUsRoute()
+    this.setContactUsRoute();
 
     // // redirection
     // // this.redirectToHttps();
@@ -211,35 +211,47 @@ class Server {
 
   private setBookingRoutes() {
     this.app.get("/api/catalog/list", async (req, res) => {
-      const items = await this.squareAPIControl.listCatalog();
-      res.send(JSON.stringify(items, undefined, 2));
+      try {
+        const items = await this.squareAPIControl.listCatalog();
+        res.send(JSON.stringify(items, undefined, 2));
+      } catch (error) {
+        res.emit("error", error);
+      }
     });
     this.app.post("/api/booking/availability", async (req, res) => {
-      const filter = req.body;
-      console.log(filter);
+      try {
+        const filter = req.body;
+        console.log(filter);
 
-      const items = await this.squareAPIControl.listBookingAvailability({
-        query: {
-          filter: {
-            startAtRange: {
-              startAt: filter.startAt,
-              endAt: filter.endAt,
+        const items = await this.squareAPIControl.listBookingAvailability({
+          query: {
+            filter: {
+              startAtRange: {
+                startAt: filter.startAt,
+                endAt: filter.endAt,
+              },
+              locationId: filter.locationId,
+              segmentFilters: filter.segmentFilters.map((s) => {
+                return { serviceVariationId: s.serviceVariationId };
+              }),
             },
-            locationId: filter.locationId,
-            segmentFilters: filter.segmentFilters.map((s) => {
-              return { serviceVariationId: s.serviceVariationId };
-            }),
           },
-        },
-      });
-      res.send(JSON.stringify(items, undefined, 2));
+        });
+        res.send(JSON.stringify(items, undefined, 2));
+      } catch (error) {
+        res.emit("error", error);
+      }
     });
   }
 
   private setContactUsRoute() {
     this.app.get("/api/contact_us", async (req, res) => {
-      const {fromEmail, name, message} = req.body;
-      const info = await this.contactManager.sendContactMail(fromEmail, name, message);
+      const { fromEmail, name, message } = req.body;
+      const info = await this.contactManager.sendContactMail(
+        fromEmail,
+        name,
+        message
+      );
       res.send(JSON.stringify(info, undefined, 2));
     });
   }
