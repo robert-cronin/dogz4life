@@ -1,10 +1,13 @@
 import React from "react";
+import moment from "moment";
 import { Button } from "antd";
 import { ApointmentOption } from "./BookingCalendar";
 
 interface ApointmentOptionsListProps {
   timeOfDay: "Morning" | "Afternoon" | "Evening";
-  options: ApointmentOption[];
+  timeOptions: moment.Moment[];
+  selectedTime: moment.Moment;
+  selectTime: (time: moment.Moment) => void;
 }
 
 class ApointmentOptionsList extends React.Component<
@@ -12,11 +15,7 @@ class ApointmentOptionsList extends React.Component<
   any
 > {
   render() {
-    console.log('heyyyy');
-    console.log(this.props.options);
-    console.log('heyyyy');
-    
-    if (this.props.options.length == 0) {
+    if (this.props.timeOptions.length == 0) {
       return (
         <div>
           <h2>{this.props.timeOfDay}</h2>
@@ -33,8 +32,25 @@ class ApointmentOptionsList extends React.Component<
               flexFlow: "row wrap",
             }}
           >
-            {this.props.options.map((o) => {
-              return <Button>{o.startAt.get("hour")}</Button>;
+            {this.props.timeOptions.map((o) => {
+              return (
+                <Button
+                  key={o.toString()}
+                  style={{ margin: "5px" }}
+                  type={
+                    o.format("HH:mm") ==
+                      this.props.selectedTime?.format("HH:mm") ?? ""
+                      ? "primary"
+                      : "link"
+                  }
+                  onClick={() => {
+                    this.props.selectTime(o);
+                    console.log("selected: ", o.format("HH:mm"));
+                  }}
+                >
+                  {o.format("HH:mm")}
+                </Button>
+              );
             })}
           </div>
         </div>

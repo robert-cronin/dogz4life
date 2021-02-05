@@ -21,10 +21,13 @@ class CatalogItemList extends React.Component<
 
   render() {
     return (
-      <ul id="catalog-list">
+      <ul id="catalog-list" style={{
+        width: '100%'
+      }}>
         {this.props.options.map((itemOptions) => {
           return (
             <CatalogItem
+            key={itemOptions.id}
               option={itemOptions}
               onCheckboxClick={(id: string) => this.props.selectOption(id)}
               onVariationSelect={(id: string, variationId: string) => this.props.selectOption(id, variationId)}

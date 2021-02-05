@@ -49,8 +49,16 @@ class NewBooking extends React.Component<any, NewBookingState> {
     const before = options.slice(0, idx);
     const item = { ...options[idx] };
     const after = options.slice(idx + 1);
-    item.isSelected = !item.isSelected;
-    item.selectedVariationId = variationId;
+    // change the item
+    if (variationId) {
+      console.log(variationId);
+      
+      item.selectedVariationId = variationId;
+      item.isSelected = true;
+    } else {
+      item.isSelected = !item.isSelected;
+    }
+    // set state
     this.setState({ options: [...before, item, ...after] });
   };
 
@@ -67,8 +75,6 @@ class NewBooking extends React.Component<any, NewBookingState> {
                 return i.type == "ITEM";
               })
               .map((i) => {
-                console.log(i);
-
                 const variations: CatalogItemVariation[] = i.itemData?.variations.map(
                   (v) => {
                     const variation: CatalogItemVariation = {
@@ -199,7 +205,9 @@ class NewBooking extends React.Component<any, NewBookingState> {
                 ))}
               </Steps>
             </div>
-            <div className="steps-content">
+            <div className="steps-content" style={{
+              width: '80vw'
+            }}>
               {steps[this.state.current].content}
             </div>
           </div>

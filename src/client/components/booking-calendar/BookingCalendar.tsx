@@ -20,6 +20,7 @@ interface BookingCalendarState {
   eveningOptions: ApointmentOption[];
   date: moment.Moment;
   selectedDate: moment.Moment;
+  selectedTime?: moment.Moment;
   error: string;
 }
 
@@ -48,6 +49,7 @@ class BookingCalendar extends React.Component<
       eveningOptions: [],
       date: moment(),
       selectedDate: moment(),
+      selectedTime: undefined,
       error: "",
     };
   }
@@ -58,24 +60,38 @@ class BookingCalendar extends React.Component<
       selectedDate: date,
       isLoading: true,
     });
+    const reqBody = createAvailabilityRequestBody(
+      this.brisbaneLocationId,
+      this.props.serviceVariationIdList,
+      date
+    );
     fetch("/api/booking/availability", {
-      body: createAvailabilityRequestBody(
-        this.brisbaneLocationId,
-        this.props.serviceVariationIdList
-      ),
+      body: reqBody,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then(
-        (result) =>
+        (result) => {
+          console.log("finished");
+          console.log(result);
+
+          const apointmentOptions = createApointmentOptions(result)
+          console.log(apointmentOptions);
+          
           this.setState({
             isLoading: false,
-            ...createApointmentOptions(result),
-          }),
-        (error) =>
+            ...apointmentOptions,
+          });
+        },
+        (error) => {
           this.setState({
             isLoading: false,
             error,
-          })
+          });
+        }
       );
   };
 
@@ -88,7 +104,7 @@ class BookingCalendar extends React.Component<
     return (
       <div
         style={{
-          width: "80vw",
+          width: "100%",
         }}
       >
         <Calendar
@@ -110,15 +126,27 @@ class BookingCalendar extends React.Component<
           </div>
           <ApointmentOptionsList
             timeOfDay="Morning"
-            options={this.state.morningOptions}
+            timeOptions={this.state.morningOptions.map(o => o.startAt)}
+            selectedTime={this.state.selectedTime}
+            selectTime={(time: moment.Moment) => {
+              this.setState({selectedTime: time})
+            }}
           />
           <ApointmentOptionsList
             timeOfDay="Afternoon"
-            options={this.state.afternoonOptions}
+            timeOptions={this.state.afternoonOptions.map(o => o.startAt)}
+            selectedTime={this.state.selectedTime}
+            selectTime={(time: moment.Moment) => {
+              this.setState({selectedTime: time})
+            }}
           />
           <ApointmentOptionsList
             timeOfDay="Evening"
-            options={this.state.eveningOptions}
+            timeOptions={this.state.eveningOptions.map(o => o.startAt)}
+            selectedTime={this.state.selectedTime}
+            selectTime={(time: moment.Moment) => {
+              this.setState({selectedTime: time})
+            }}
           />
         </div>
       </div>

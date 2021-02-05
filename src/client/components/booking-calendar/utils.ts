@@ -3,13 +3,19 @@ import { ApointmentOption } from "./BookingCalendar";
 
 function createAvailabilityRequestBody(
   locationId: string,
-  serviceVariationIdList: string[]
+  serviceVariationIdList: string[],
+  startAt: moment.Moment
 ) {
   // create the request body
-  const now = moment();
+  const dayStart = startAt
+    .clone()
+    .set("hour", 0)
+    .set("minute", 0)
+    .set("second", 0)
+    .set("millisecond", 0);
   const req = {
-    startAt: now.toISOString(),
-    endAt: now.add(4, "months").toISOString(),
+    startAt: dayStart.toISOString(),
+    endAt: dayStart.clone().set("hour", 24).toISOString(),
     locationId: locationId,
     segmentFilters: serviceVariationIdList.map((s) => {
       return {
@@ -28,10 +34,9 @@ function createApointmentOptions(
   eveningOptions: ApointmentOption[];
 } {
   const filteredOptions = options
-    .filter((i) => i.type == "ITEM")
     .map((a) => {
       const option: ApointmentOption = {
-        startAt: a.startAt,
+        startAt: moment(a.startAt),
         locationId: a.locationId,
         apointmentSegments: a.appointmentSegments.map((as) => {
           return {
@@ -56,11 +61,11 @@ function createApointmentOptions(
   const afternoonOptions = filteredOptions.filter((o) => {
     return (
       o.startAt.isSameOrAfter(resetMoment(o.startAt).set("hour", 12)) &&
-      o.startAt.isBefore(resetMoment(o.startAt).set("hour", 5))
+      o.startAt.isBefore(resetMoment(o.startAt).set("hour", 17))
     );
   });
   const eveningOptions = filteredOptions.filter((o) => {
-    return o.startAt.isSameOrAfter(resetMoment(o.startAt).set("hour", 5));
+    return o.startAt.isSameOrAfter(resetMoment(o.startAt).set("hour", 17));
   });
   return {
     morningOptions,

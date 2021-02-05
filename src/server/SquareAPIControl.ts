@@ -1,6 +1,7 @@
 import {
   ApiError,
   Client,
+  CreateBookingRequest,
   CreateCustomerRequest,
   Customer,
   Environment,
@@ -10,6 +11,7 @@ import {
 class SquareAPIControl {
   client: Client;
   idempotencyKey = process.env.SQUARE_IDEMPOTENCY_KEY;
+  jodiTeamMemberId = 'TMS7VmtQCPHZ_lw7'
 
   constructor() {
     this.client = new Client({
@@ -74,6 +76,21 @@ class SquareAPIControl {
       const { result } = await this.client.bookingsApi.searchAvailability(req);
       console.log("API called successfully. Returned data: ", result);
       return result.availabilities ?? [];
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.log(error.errors.forEach((e) => console.log(e)));
+
+        throw Error(`Errors: ${error.errors}`);
+      } else {
+        throw Error(`Unexpected Error: ${error}`);
+      }
+    }
+  }
+  async newBooking(req: CreateBookingRequest) {
+    try {
+      const { result } = await this.client.bookingsApi.createBooking(req);
+      console.log("API called successfully. Returned data: ", result);
+      return result.booking;
     } catch (error) {
       if (error instanceof ApiError) {
         console.log(error.errors.forEach((e) => console.log(e)));

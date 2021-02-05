@@ -4,6 +4,7 @@ import util from "util";
 import path from "path";
 import http from "http";
 import https from "https";
+import crypto from 'crypto';
 import express from "express";
 import passport from "passport";
 import querystring from "querystring";
@@ -221,8 +222,6 @@ class Server {
     this.app.post("/api/booking/availability", async (req, res) => {
       try {
         const filter = req.body;
-        console.log(filter);
-
         const items = await this.squareAPIControl.listBookingAvailability({
           query: {
             filter: {
@@ -236,6 +235,31 @@ class Server {
               }),
             },
           },
+        });
+        res.send(JSON.stringify(items, undefined, 2));
+      } catch (error) {
+        res.emit("error", error);
+      }
+    });
+    this.app.post("/api/booking/new", this.secured, async (req, res) => {
+      try {
+        const body = req.body;
+        const items = await this.squareAPIControl.newBooking({
+          booking: {
+            appointmentSegments: body.appointmentSegments.map(a => {
+              return {
+                teamMemberId: a.durationMinutes,
+                serviceVariationId: a.serviceVariationId,
+                serviceVariationVersion: a.serviceVariationVersion,
+                durationMinutes: a.durationMinutes,
+              }
+            }),
+            startAt: body.startAt,
+            locationId: body.locationId,
+            customerId: 'some customer id',
+            customerNote: body.customerNote ?? '',
+          },
+          idempotencyKey: this.squareAPIControl.idempotencyKey,
         });
         res.send(JSON.stringify(items, undefined, 2));
       } catch (error) {
@@ -283,15 +307,15 @@ class Server {
     res: express.Response,
     next: express.NextFunction
   ) {
-    console.log("secured");
-    console.log(req);
-    console.log(req.user);
+    // console.log("secured");
+    // console.log(req);
+    // console.log(req.user);
 
-    if (req.user) {
-      return next();
-    }
-    req.session["returnTo"] = req.originalUrl;
-    res.redirect("/login");
+    // if (req.user) {
+    //   return next();
+    // }
+    // req.session["returnTo"] = req.originalUrl;
+    // res.redirect("/login");
   }
 }
 
