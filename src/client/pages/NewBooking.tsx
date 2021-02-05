@@ -3,6 +3,8 @@ import moment from "moment";
 import { Steps, Button, message, Card, Form } from "antd";
 import CatalogItemList from "../components/catalog/CatalogItemList";
 import BookingCalendar from "../components/booking-calendar/BookingCalendar";
+import { AppointmentOption } from "../components/booking-calendar/BookingCalendar";
+import BookingConfirmation from "../components/booking-confirmation/BookingConfirmation";
 const { Step } = Steps;
 
 interface CatalogItemVariation {
@@ -29,6 +31,7 @@ interface NewBookingState {
   current: number;
   isLoading: boolean;
   error: string;
+  selectedAppointmentOption?: AppointmentOption;
 }
 
 class NewBooking extends React.Component<any, NewBookingState> {
@@ -52,7 +55,7 @@ class NewBooking extends React.Component<any, NewBookingState> {
     // change the item
     if (variationId) {
       console.log(variationId);
-      
+
       item.selectedVariationId = variationId;
       item.isSelected = true;
     } else {
@@ -82,7 +85,8 @@ class NewBooking extends React.Component<any, NewBookingState> {
                       name: v.itemVariationData.name,
                       price: {
                         amount: v.itemVariationData?.priceMoney?.amount ?? -1,
-                        currency: v.itemVariationData?.priceMoney?.currency ?? '',
+                        currency:
+                          v.itemVariationData?.priceMoney?.currency ?? "",
                       },
                       duration: moment(
                         new Date(v.itemVariationData?.serviceDuration as number)
@@ -124,8 +128,11 @@ class NewBooking extends React.Component<any, NewBookingState> {
     });
   }
 
-  onFinish(values) {
-    console.log("Success:", values);
+  onFinish() {
+    const selectedOptions = this.state.options.filter((o) => o.isSelected);
+    const selectedTime = this.state.selectedAppointmentOption;
+    console.log(selectedOptions);
+    console.log(selectedTime);
   }
 
   onFinishFailed(errorInfo) {
@@ -150,12 +157,19 @@ class NewBooking extends React.Component<any, NewBookingState> {
             serviceVariationIdList={this.state.options
               .filter((o) => o.isSelected)
               .map((o) => o.selectedVariationId)}
+            selectedAppointmentOption={this.state.selectedAppointmentOption}
+            selectAppointmentOption={(option: AppointmentOption) =>
+              this.setState({ selectedAppointmentOption: option })
+            }
           />
         ),
       },
       {
-        title: "Enter your details",
-        content: <span />,
+        title: "Booking Confirmation",
+        content: <BookingConfirmation
+        selectedCatalogOptions={this.state.options.filter(o => o.isSelected)} 
+        selectedAppointmentOption={this.state.selectedAppointmentOption} 
+        />,
       },
     ];
     return (
@@ -172,7 +186,10 @@ class NewBooking extends React.Component<any, NewBookingState> {
             <Form.Item>
               <Button
                 type="primary"
-                onClick={() => message.success("Processing complete!")}
+                onClick={() => {
+                  message.success("Processing complete!");
+                  this.onFinish();
+                }}
               >
                 Done
               </Button>
@@ -205,9 +222,12 @@ class NewBooking extends React.Component<any, NewBookingState> {
                 ))}
               </Steps>
             </div>
-            <div className="steps-content" style={{
-              width: '80vw'
-            }}>
+            <div
+              className="steps-content"
+              style={{
+                width: "80vw",
+              }}
+            >
               {steps[this.state.current].content}
             </div>
           </div>

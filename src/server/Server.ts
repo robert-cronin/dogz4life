@@ -4,14 +4,14 @@ import util from "util";
 import path from "path";
 import http from "http";
 import https from "https";
-import crypto from 'crypto';
+import crypto from "crypto";
 import express from "express";
 import passport from "passport";
 import querystring from "querystring";
 import session from "express-session";
+import cookieParser from "cookie-parser";
 import Auth0Strategy from "passport-auth0";
 import FileStore from "session-file-store";
-import { auth } from "express-openid-connect";
 import ContactManager from "./ContactManager";
 import SquareAPIControl from "./SquareAPIControl";
 
@@ -63,27 +63,14 @@ class Server {
   }
 
   private setupSession() {
+    this.app.use(cookieParser());
     // session
     this.app.use(
       session({
         secret: process.env.EXPRESS_SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
-        cookie: {
-          // secure: true,
-        },
         store: new (FileStore(session))(),
-      })
-    );
-    // auth router attaches /login, /logout, and /callback routes to the baseURL
-    this.app.use(
-      auth({
-        authRequired: false,
-        auth0Logout: true,
-        secret: process.env.AUTH0_CLIENT_SECRET,
-        baseURL: "https://localhost/",
-        clientID: process.env.AUTH0_CLIENT_ID,
-        issuerBaseURL: "https://dev-h3edly4h.au.auth0.com",
       })
     );
   }
@@ -94,11 +81,11 @@ class Server {
     const strategy = new Auth0Strategy(
       {
         domain: process.env.AUTH0_DOMAIN,
-        state: false,
         clientID: process.env.AUTH0_CLIENT_ID,
         clientSecret: process.env.AUTH0_CLIENT_SECRET,
-        callbackURL:
-          process.env.AUTH0_CALLBACK_URL || "https://localhost/callback",
+        callbackURL: "https://localhost/callback",
+        // callbackURL:
+        //   process.env.AUTH0_CALLBACK_URL || "https://localhost/callback",
       },
       (accessToken, refreshToken, extraParams, profile, done) => {
         // accessToken is the token to call Auth0 API (not needed in the most cases)
@@ -135,26 +122,34 @@ class Server {
         res.redirect("/");
       }
     );
+    this.app.get("/logged_in", (req, res) => {
+      console.log(req.user);
+    });
 
-    this.app.use("/callback", (req, res, next) => {
-      console.log("ejuhrgbjuehbgruehrbgjuehgbr");
-      res.send("skdjfnksjndf");
-
+    this.app.get("/callback", (req, res, next) => {
       passport.authenticate("auth0", (err, user, info) => {
-        console.log("auth0");
-        console.log("skdfjngjksnrtfgikswjtfnrghjsrdtgh");
-
         if (err) {
+          console.log("error");
+          console.log(err);
+
           return next(err);
         }
         if (!user) {
+          console.log("not user");
+
           return res.redirect("/login");
         }
+        console.log("logging in");
+
         req.logIn(user, (err) => {
           if (err) {
             return next(err);
           }
+          console.log("no error");
+
           const returnTo = req.session["returnTo"];
+          console.log("the returnTo address:", returnTo);
+
           delete req.session["returnTo"];
           res.redirect(returnTo || "/user");
         });
@@ -184,9 +179,17 @@ class Server {
 
   private setUserRoutes() {
     /* GET user profile. */
-    this.app.get("/user", this.secured, (req, res, next) => {
-      const { _raw, _json, ...userProfile } = req.user as any;
-      res.send(JSON.stringify(userProfile, null, 2));
+    this.app.get("/user", (req, res, next) => {
+      let response: any;
+      if (!req.user) {
+        response = {
+          error: "unauthenticated",
+        };
+      } else {
+        const { _raw, _json, ...userProfile } = req.user as any;
+        response = userProfile;
+      }
+      res.send(JSON.stringify(response, null, 2));
     });
 
     // POST new user
@@ -246,18 +249,18 @@ class Server {
         const body = req.body;
         const items = await this.squareAPIControl.newBooking({
           booking: {
-            appointmentSegments: body.appointmentSegments.map(a => {
+            appointmentSegments: body.appointmentSegments.map((a) => {
               return {
-                teamMemberId: a.durationMinutes,
+                teamMemberId: a.teamMemberId,
                 serviceVariationId: a.serviceVariationId,
                 serviceVariationVersion: a.serviceVariationVersion,
                 durationMinutes: a.durationMinutes,
-              }
+              };
             }),
             startAt: body.startAt,
             locationId: body.locationId,
-            customerId: 'some customer id',
-            customerNote: body.customerNote ?? '',
+            customerId: "some customer id",
+            customerNote: body.customerNote ?? "",
           },
           idempotencyKey: this.squareAPIControl.idempotencyKey,
         });
@@ -307,15 +310,11 @@ class Server {
     res: express.Response,
     next: express.NextFunction
   ) {
-    // console.log("secured");
-    // console.log(req);
-    // console.log(req.user);
-
-    // if (req.user) {
-    //   return next();
-    // }
-    // req.session["returnTo"] = req.originalUrl;
-    // res.redirect("/login");
+    if (req.user) {
+      return next();
+    }
+    req.session["returnTo"] = req.originalUrl;
+    res.redirect("/login");
   }
 }
 

@@ -1,5 +1,5 @@
 import moment from "moment";
-import { ApointmentOption } from "./BookingCalendar";
+import { AppointmentOption } from "./BookingCalendar";
 
 function createAvailabilityRequestBody(
   locationId: string,
@@ -29,25 +29,25 @@ function createAvailabilityRequestBody(
 function createApointmentOptions(
   options: any[]
 ): {
-  morningOptions: ApointmentOption[];
-  afternoonOptions: ApointmentOption[];
-  eveningOptions: ApointmentOption[];
+  morningOptions: AppointmentOption[];
+  afternoonOptions: AppointmentOption[];
+  eveningOptions: AppointmentOption[];
 } {
-  const filteredOptions = options
-    .map((a) => {
-      const option: ApointmentOption = {
-        startAt: moment(a.startAt),
-        locationId: a.locationId,
-        apointmentSegments: a.appointmentSegments.map((as) => {
-          return {
-            durationMinutes: as.durationMinutes,
-            serviceVariationId: as.serviceVariationId,
-            teamMemberId: as.teamMemberId,
-          };
-        }),
-      };
-      return option;
-    });
+  const filteredOptions = options.map((a) => {
+    const option: AppointmentOption = {
+      startAt: moment(a.startAt),
+      locationId: a.locationId,
+      apointmentSegments: a.appointmentSegments.map((as) => {
+        return {
+          durationMinutes: as.durationMinutes,
+          serviceVariationId: as.serviceVariationId,
+          teamMemberId: as.teamMemberId,
+          serviceVariationVersion: as.serviceVariationVersion,
+        };
+      }),
+    };
+    return option;
+  });
   const resetMoment = (m: moment.Moment) =>
     m
       .clone()

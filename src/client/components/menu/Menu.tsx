@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import React from "react";
-import { Button } from "antd";
+import { Button, Avatar } from "antd";
 import {
   CalendarFilled,
   HomeFilled,
@@ -13,7 +13,6 @@ import {
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import MenuButton from "./MenuButton";
-import LoginModal from "../../pages/LoginModal";
 
 interface NavigationProps {
   location: any;
@@ -21,7 +20,8 @@ interface NavigationProps {
 
 interface NavigationState {
   isOpen: boolean;
-  isModalVisible: boolean;
+  loggedIn: boolean;
+  userProfile?: any;
 }
 
 class Menu extends React.Component<NavigationProps, NavigationState> {
@@ -29,8 +29,27 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
     super(props);
     this.state = {
       isOpen: false,
-      isModalVisible: false,
+      loggedIn: false,
     };
+  }
+
+  componentDidMount() {
+    fetch("/user")
+      .then((res) => res.json())
+      .then(
+        (userProfile) => {
+          if (userProfile.id) {
+            this.setState({
+              loggedIn: true,
+              userProfile
+            });
+          }
+        },
+        (error) => {
+          console.log("error");
+          console.log(error);
+        }
+      );
   }
 
   handleCloseButtonClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
@@ -99,20 +118,21 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
 
           <hr />
           <div id="pc-menu-spacer" />
-          <MenuButton
-            icon={<LoginOutlined />}
-            text="Login/Signup"
-            route=""
-            onButtonClick={() => {
-              this.handleButtonClick();
-              this.setState({ isModalVisible: true });
-            }}
-          />
-          <LoginModal
-            showModal={() => this.setState({ isModalVisible: true })}
-            hideModal={() => this.setState({ isModalVisible: false })}
-            isModalVisible={this.state.isModalVisible}
-          />
+          {this.state.loggedIn ? (
+            <>
+              <Avatar src={this.state.userProfile.picture} />
+              <span>{this.state.userProfile.nickname}</span>
+            </>
+          ) : (
+            <MenuButton
+              icon={<LoginOutlined />}
+              text="Login/Signup"
+              route=""
+              onButtonClick={() => {
+                this.handleButtonClick();
+              }}
+            />
+          )}
           <Button
             type="link"
             id="close-menu-button"

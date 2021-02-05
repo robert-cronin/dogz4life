@@ -5,31 +5,33 @@ import {
   createApointmentOptions,
   createAvailabilityRequestBody,
 } from "./utils";
-import ApointmentOptionsList from "./ApointmentOptionsList";
+import AppointmentOptionsList from "./AppointmentOptionsList";
 
 interface BookingCalendarProps {
   serviceVariationIdList: string[];
+  selectedAppointmentOption?: AppointmentOption;
+  selectAppointmentOption: (option: AppointmentOption) => void;
 }
 // Morning: anything before 12pm
 // Afternoon: anything between the other two
 // Evening: anything after 5pm
 interface BookingCalendarState {
   isLoading: boolean;
-  morningOptions: ApointmentOption[];
-  afternoonOptions: ApointmentOption[];
-  eveningOptions: ApointmentOption[];
+  morningOptions: AppointmentOption[];
+  afternoonOptions: AppointmentOption[];
+  eveningOptions: AppointmentOption[];
   date: moment.Moment;
   selectedDate: moment.Moment;
-  selectedTime?: moment.Moment;
   error: string;
 }
 
-interface ApointmentOption {
+interface AppointmentOption {
   startAt: moment.Moment;
   locationId: string;
   apointmentSegments: {
     durationMinutes: number;
     serviceVariationId: string;
+    serviceVariationVersion: string;
     teamMemberId: string;
   }[];
 }
@@ -49,7 +51,6 @@ class BookingCalendar extends React.Component<
       eveningOptions: [],
       date: moment(),
       selectedDate: moment(),
-      selectedTime: undefined,
       error: "",
     };
   }
@@ -78,9 +79,9 @@ class BookingCalendar extends React.Component<
           console.log("finished");
           console.log(result);
 
-          const apointmentOptions = createApointmentOptions(result)
+          const apointmentOptions = createApointmentOptions(result);
           console.log(apointmentOptions);
-          
+
           this.setState({
             isLoading: false,
             ...apointmentOptions,
@@ -124,28 +125,28 @@ class BookingCalendar extends React.Component<
             You can schedule an appointment between 1 day and 365 days ahead of
             time.
           </div>
-          <ApointmentOptionsList
+          <AppointmentOptionsList
             timeOfDay="Morning"
-            timeOptions={this.state.morningOptions.map(o => o.startAt)}
-            selectedTime={this.state.selectedTime}
-            selectTime={(time: moment.Moment) => {
-              this.setState({selectedTime: time})
+            appointmentOptions={this.state.morningOptions}
+            selectedAppointmentOption={this.props.selectedAppointmentOption}
+            selectAppointmentOption={(option: AppointmentOption) => {
+              this.props.selectAppointmentOption(option);
             }}
           />
-          <ApointmentOptionsList
+          <AppointmentOptionsList
             timeOfDay="Afternoon"
-            timeOptions={this.state.afternoonOptions.map(o => o.startAt)}
-            selectedTime={this.state.selectedTime}
-            selectTime={(time: moment.Moment) => {
-              this.setState({selectedTime: time})
+            appointmentOptions={this.state.afternoonOptions}
+            selectedAppointmentOption={this.props.selectedAppointmentOption}
+            selectAppointmentOption={(option: AppointmentOption) => {
+              this.props.selectAppointmentOption(option);
             }}
           />
-          <ApointmentOptionsList
+          <AppointmentOptionsList
             timeOfDay="Evening"
-            timeOptions={this.state.eveningOptions.map(o => o.startAt)}
-            selectedTime={this.state.selectedTime}
-            selectTime={(time: moment.Moment) => {
-              this.setState({selectedTime: time})
+            appointmentOptions={this.state.eveningOptions}
+            selectedAppointmentOption={this.props.selectedAppointmentOption}
+            selectAppointmentOption={(option: AppointmentOption) => {
+              this.props.selectAppointmentOption(option);
             }}
           />
         </div>
@@ -155,4 +156,4 @@ class BookingCalendar extends React.Component<
 }
 
 export default BookingCalendar;
-export { ApointmentOption };
+export { AppointmentOption };

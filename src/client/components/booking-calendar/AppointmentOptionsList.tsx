@@ -1,21 +1,21 @@
 import React from "react";
 import moment from "moment";
 import { Button } from "antd";
-import { ApointmentOption } from "./BookingCalendar";
+import { AppointmentOption } from "./BookingCalendar";
 
-interface ApointmentOptionsListProps {
+interface AppointmentOptionsListProps {
   timeOfDay: "Morning" | "Afternoon" | "Evening";
-  timeOptions: moment.Moment[];
-  selectedTime: moment.Moment;
-  selectTime: (time: moment.Moment) => void;
+  appointmentOptions: AppointmentOption[];
+  selectedAppointmentOption: AppointmentOption;
+  selectAppointmentOption: (option: AppointmentOption) => void;
 }
 
-class ApointmentOptionsList extends React.Component<
-  ApointmentOptionsListProps,
+class AppointmentOptionsList extends React.Component<
+  AppointmentOptionsListProps,
   any
 > {
   render() {
-    if (this.props.timeOptions.length == 0) {
+    if (this.props.appointmentOptions.length == 0) {
       return (
         <div>
           <h2>{this.props.timeOfDay}</h2>
@@ -32,23 +32,24 @@ class ApointmentOptionsList extends React.Component<
               flexFlow: "row wrap",
             }}
           >
-            {this.props.timeOptions.map((o) => {
+            {this.props.appointmentOptions.map((o) => {
               return (
                 <Button
-                  key={o.toString()}
+                  key={o.startAt.toISOString()}
                   style={{ margin: "5px" }}
                   type={
-                    o.format("HH:mm") ==
-                      this.props.selectedTime?.format("HH:mm") ?? ""
+                    o.startAt.format("HH:mm") ==
+                      this.props.selectedAppointmentOption?.startAt.format("HH:mm") ??
+                    ""
                       ? "primary"
                       : "link"
                   }
                   onClick={() => {
-                    this.props.selectTime(o);
-                    console.log("selected: ", o.format("HH:mm"));
+                    this.props.selectAppointmentOption(o);
+                    console.log("selected: ", o.startAt.format("HH:mm"));
                   }}
                 >
-                  {o.format("HH:mm")}
+                  {o.startAt.format("HH:mm")}
                 </Button>
               );
             })}
@@ -59,4 +60,4 @@ class ApointmentOptionsList extends React.Component<
   }
 }
 
-export default ApointmentOptionsList;
+export default AppointmentOptionsList;
