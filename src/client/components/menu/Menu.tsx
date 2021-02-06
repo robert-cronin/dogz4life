@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 import { withRouter } from "react-router-dom";
 import MenuButton from "./MenuButton";
+import UserDropdown from "../user/UserDropdown";
 
 interface NavigationProps {
   location: any;
@@ -118,11 +119,8 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
 
           <hr />
           <div id="pc-menu-spacer" />
-          {this.state.loggedIn ? (
-            <>
-              <Avatar src={this.state.userProfile.picture} />
-              <span>{this.state.userProfile.nickname}</span>
-            </>
+          {(this.state.loggedIn && this.state.userProfile) ? (
+            <UserDropdown userProfile={this.state.userProfile} />
           ) : (
             <MenuButton
               icon={<LoginOutlined />}
@@ -130,6 +128,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
               route=""
               onButtonClick={() => {
                 this.handleButtonClick();
+                window.location.href = '/login'
               }}
             />
           )}

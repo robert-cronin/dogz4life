@@ -1,4 +1,5 @@
 import fs from "fs";
+import os from "os";
 import url from "url";
 import util from "util";
 import path from "path";
@@ -7,6 +8,7 @@ import https from "https";
 import crypto from "crypto";
 import express from "express";
 import passport from "passport";
+import { env, loadEnv } from "./env";
 import querystring from "querystring";
 import session from "express-session";
 import cookieParser from "cookie-parser";
@@ -14,18 +16,47 @@ import Auth0Strategy from "passport-auth0";
 import FileStore from "session-file-store";
 import ContactManager from "./ContactManager";
 import SquareAPIControl from "./SquareAPIControl";
+import { Database } from "sqlite3";
+loadEnv();
 
 class Server {
   app: express.Express;
   contactManager: ContactManager;
   squareAPIControl: SquareAPIControl;
+  db: Database;
+  dbPath: string = path.join(__dirname, "..", "..", "tmp", "dogz4life.db");
+
+  createTables() {
+    try {
+      this.db.run(`CREATE TABLE users (
+        USER_ID TEXT
+      )`);
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   constructor() {
+    this.db = new Database(this.dbPath);
+    this.createTables();
+    // this.db.serialize(() => {
+    //   this.db.run("CREATE TABLE lorem (info TEXT)");
+
+    //   var stmt = this.db.prepare("INSERT INTO lorem VALUES (?)");
+    //   for (let i = 0; i < 10; i++) {
+    //     stmt.run("Ipsum " + i);
+    //   }
+    //   stmt.finalize();
+
+    //   this.db.all("SELECT rowid AS id, info FROM lorem", function (err, row) {
+    //     console.log(row.id + ": " + row.info);
+    //   });
+    // });
     this.app = express();
     this.app.use(express.json());
     this.contactManager = new ContactManager();
     this.squareAPIControl = new SquareAPIControl();
-
     // auth routes
     this.setupSession();
     this.setupPassport();
@@ -67,7 +98,7 @@ class Server {
     // session
     this.app.use(
       session({
-        secret: process.env.EXPRESS_SESSION_SECRET,
+        secret: env.EXPRESS_SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
         store: new (FileStore(session))(),
@@ -80,12 +111,12 @@ class Server {
     // Configure Passport to use Auth0
     const strategy = new Auth0Strategy(
       {
-        domain: process.env.AUTH0_DOMAIN,
-        clientID: process.env.AUTH0_CLIENT_ID,
-        clientSecret: process.env.AUTH0_CLIENT_SECRET,
+        domain: env.AUTH0_DOMAIN,
+        clientID: env.AUTH0_CLIENT_ID,
+        clientSecret: env.AUTH0_CLIENT_SECRET,
         callbackURL: "https://localhost/callback",
         // callbackURL:
-        //   process.env.AUTH0_CALLBACK_URL || "https://localhost/callback",
+        //   env.AUTH0_CALLBACK_URL || "https://localhost/callback",
       },
       (accessToken, refreshToken, extraParams, profile, done) => {
         // accessToken is the token to call Auth0 API (not needed in the most cases)
@@ -165,10 +196,10 @@ class Server {
         returnTo += ":" + port;
       }
       const logoutURL = new url.URL(
-        util.format("https://%s/v2/logout", process.env.AUTH0_DOMAIN)
+        util.format("https://%s/v2/logout", env.AUTH0_DOMAIN)
       );
       const searchString = querystring.stringify({
-        client_id: process.env.AUTH0_CLIENT_ID,
+        client_id: env.AUTH0_CLIENT_ID,
         returnTo: returnTo,
       });
       logoutURL.search = searchString;
@@ -262,7 +293,7 @@ class Server {
             customerId: "some customer id",
             customerNote: body.customerNote ?? "",
           },
-          idempotencyKey: this.squareAPIControl.idempotencyKey,
+          idempotencyKey: crypto.randomBytes(32).toString("base64"),
         });
         res.send(JSON.stringify(items, undefined, 2));
       } catch (error) {
@@ -287,7 +318,7 @@ class Server {
     // redirect to https
     this.app.use((req, res, next) => {
       if (
-        process.env.NODE_ENV === "production" &&
+        env.NODE_ENV === "production" &&
         req.headers["x-forwarded-proto"] !== "https"
       ) {
         // the statement for performing our redirection

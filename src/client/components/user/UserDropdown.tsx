@@ -1,29 +1,55 @@
 import React from "react";
-import { Dropdown, Menu } from "antd";
+import { Avatar, Dropdown, Menu } from "antd";
+import {
+  UserOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+} from "@ant-design/icons";
 
-class UserDropdown extends React.Component {
+interface UserDropdownProps {
+  userProfile: any;
+}
+
+class UserDropdown extends React.Component<UserDropdownProps, any> {
   constructor(props) {
     super(props);
   }
-  handleMenuClick(e) {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  }
   render() {
     const menu = (
-      <Menu onClick={this.handleMenuClick}>
-        <Menu.Item key="1" icon={<UserOutlined />}>
-          1st menu item
+      <Menu>
+        <Menu.Item key="1" icon={<ProfileOutlined />}>
+          My Information
         </Menu.Item>
         <Menu.Item key="2" icon={<UserOutlined />}>
-          2nd menu item
+          Manage Pets
         </Menu.Item>
-        <Menu.Item key="3" icon={<UserOutlined />}>
-          3rd menu item
+        <Menu.Item
+          key="3"
+          icon={<LogoutOutlined />}
+          onClick={() => window.location.replace("/logout")}
+        >
+          Logout
         </Menu.Item>
       </Menu>
     );
-    return <Dropdown.Button overlay={menu}>User</Dropdown.Button>;
+    return (
+      <Dropdown overlay={menu}>
+        <div>
+          <span style={{ paddingRight: "5px", color: "white" }}>
+            {this.props.userProfile.nickname}
+          </span>
+          <Avatar
+            src={
+              this.props.userProfile.picture ? (
+                this.props.userProfile.picture
+              ) : (
+                <UserOutlined />
+              )
+            }
+          />
+        </div>
+      </Dropdown>
+    );
   }
 }
 

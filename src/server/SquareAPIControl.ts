@@ -7,17 +7,17 @@ import {
   Environment,
   SearchAvailabilityRequest,
 } from "square";
+import { env } from "./env";
 
 class SquareAPIControl {
   client: Client;
-  idempotencyKey = process.env.SQUARE_IDEMPOTENCY_KEY;
-  jodiTeamMemberId = 'TMS7VmtQCPHZ_lw7'
+  jodiTeamMemberId = "TMS7VmtQCPHZ_lw7";
 
   constructor() {
     this.client = new Client({
       timeout: 100000,
       environment: Environment.Production,
-      accessToken: process.env.SQUARE_ACCESS_TOKEN,
+      accessToken: env.SQUARE_ACCESS_TOKEN,
     });
 
     // Unique key to ensure this operation runs only once if you need to retry
