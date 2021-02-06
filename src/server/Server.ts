@@ -39,7 +39,7 @@ class Server {
 
   constructor() {
     this.db = new Database(this.dbPath);
-    this.createTables();
+    // this.createTables();
     // this.db.serialize(() => {
     //   this.db.run("CREATE TABLE lorem (info TEXT)");
 
@@ -208,6 +208,8 @@ class Server {
     });
   }
 
+  // private getClient() {}
+
   private setUserRoutes() {
     /* GET user profile. */
     this.app.get("/user", (req, res, next) => {
@@ -218,6 +220,8 @@ class Server {
         };
       } else {
         const { _raw, _json, ...userProfile } = req.user as any;
+        // get customer data
+        // userProfile.
         response = userProfile;
       }
       res.send(JSON.stringify(response, null, 2));

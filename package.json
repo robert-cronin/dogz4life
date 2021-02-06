@@ -76,12 +76,12 @@
     "scripts": {
         "webpack-dev-server": "webpack-dev-server --mode development --config ./webpack.config.client.ts",
         "watch:client": "webpack --watch --mode development --config ./webpack.config.client.ts",
-        "watch:server": "webpack --watch --mode development --config ./webpack.config.server.ts",
-        "watch:nodemon": "nodemon -r dotenv/config ./build/server/server.js --watch ./build",
+        "watch:server": "tsc --build tsconfig.server.json --watch",
+        "watch:nodemon": "nodemon -r dotenv/config ./build/server/Server.js --watch ./build",
         "open-dev": "node ./scripts/open-dev.js",
         "dev": "concurrently \"npm:watch:*\" \"npm:open-dev\"",
         "build:client": "webpack --mode production --config ./webpack.config.client.ts",
-        "build:server": "webpack --mode production --config ./webpack.config.server.ts",
+        "build:server": "tsc --build tsconfig.server.json",
         "build": "rm -rf ./build & concurrently \"npm:build:*\""
     },
     "browserslist": {

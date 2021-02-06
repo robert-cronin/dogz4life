@@ -28,7 +28,7 @@ class SquareAPIControl {
     // Use a try/catch statement to check if the response succeeded or failed
     try {
       const { result } = await this.client.customersApi.createCustomer(request);
-      return result;
+      return result.customer;
     } catch (error) {
       if (error instanceof ApiError) {
         console.log("Errors: ", error.errors);
@@ -43,6 +43,21 @@ class SquareAPIControl {
       let { result } = await this.client.customersApi.listCustomers();
       console.log("API called successfully. Returned data: ", result);
       return result.customers ?? [];
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw Error(`Errors: ${error.errors}`);
+      } else {
+        throw Error(`Unexpected Error: ${error}`);
+      }
+    }
+  }
+  async retrieveCustomer(customerId: string): Promise<Customer | undefined> {
+    try {
+      let { result } = await this.client.customersApi.retrieveCustomer(
+        customerId
+      );
+      console.log("API called successfully. Returned data: ", result);
+      return result.customer ?? undefined;
     } catch (error) {
       if (error instanceof ApiError) {
         throw Error(`Errors: ${error.errors}`);

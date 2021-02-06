@@ -79,8 +79,8 @@ const clientConfig = {
     port: 9000,
     hot: true,
     https: true,
-    key: fs.readFileSync('./tmp/privkey.pem'),
-    cert: fs.readFileSync('./tmp/cert.pem'),
+    key: fs.readFileSync("./tmp/privkey.pem"),
+    cert: fs.readFileSync("./tmp/cert.pem"),
   },
 };
 
