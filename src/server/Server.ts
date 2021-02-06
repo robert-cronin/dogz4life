@@ -17,6 +17,7 @@ import FileStore from "session-file-store";
 import ContactManager from "./ContactManager";
 import SquareAPIControl from "./SquareAPIControl";
 import { Database } from "sqlite3";
+import { Customer } from "square";
 loadEnv();
 
 class Server {
@@ -24,35 +25,46 @@ class Server {
   contactManager: ContactManager;
   squareAPIControl: SquareAPIControl;
   db: Database;
-  dbPath: string = path.join(__dirname, "..", "..", "tmp", "dogz4life.db");
+  dbPath: string = path.join(__dirname, "..", "..", "sql", "dogz4life.db");
 
   createTables() {
     try {
-      this.db.run(`CREATE TABLE users (
-        USER_ID TEXT
-      )`);
+      // Read the SQL file
+      const dataSql = fs
+        .readFileSync(path.join(__dirname, "../../sql/dogz4life.sql"))
+        .toString();
+
+      // Convert the SQL string to array so that you can run them one at a time.
+      // You can split the strings using the query delimiter i.e. `;` in // my case I used `);` because some data in the queries had `;`.
+      const dataArr = dataSql.toString().split(");");
+
+      // db.serialize ensures that your queries are one after the other depending on which one came first in your `dataArr`
+      this.db.serialize(() => {
+        // db.run runs your SQL query against the DB
+        this.db.run("PRAGMA foreign_keys=OFF;");
+        this.db.run("BEGIN TRANSACTION;");
+        // Loop through the `dataArr` and db.run each query
+        dataArr.forEach((query) => {
+          if (query.match(/([\w]+)/)) {
+            // Add the delimiter back to each query before you run them
+            // In my case the it was `);`
+            query += ");";
+
+            this.db.run(query, (err) => {
+              if (err) throw err;
+            });
+          }
+        });
+        this.db.run("COMMIT;");
+      });
     } catch (error) {
       console.log(error);
-      
     }
   }
 
   constructor() {
     this.db = new Database(this.dbPath);
-    // this.createTables();
-    // this.db.serialize(() => {
-    //   this.db.run("CREATE TABLE lorem (info TEXT)");
-
-    //   var stmt = this.db.prepare("INSERT INTO lorem VALUES (?)");
-    //   for (let i = 0; i < 10; i++) {
-    //     stmt.run("Ipsum " + i);
-    //   }
-    //   stmt.finalize();
-
-    //   this.db.all("SELECT rowid AS id, info FROM lorem", function (err, row) {
-    //     console.log(row.id + ": " + row.info);
-    //   });
-    // });
+    this.createTables();
     this.app = express();
     this.app.use(express.json());
     this.contactManager = new ContactManager();
@@ -208,11 +220,65 @@ class Server {
     });
   }
 
-  // private getClient() {}
+  private async createUser(userId: string, email: string): Promise<void> {
+    return await new Promise<void>(async (resolve, reject) => {
+      // check if there is an existing customer with this email
+      const searchCustomers = await this.squareAPIControl.searchCustomers({
+        limit: 1,
+        query: { filter: { emailAddress: { exact: email } } },
+      });
+      let customer: Customer;
+      if (searchCustomers.length >= 1) {
+        customer = searchCustomers[0]
+      } else {
+        customer = await this.squareAPIControl.createCustomer({
+          referenceId: userId,
+          emailAddress: email,
+        });
+      }
+      this.db.run(
+        `INSERT INTO user (USER_ID, CUSTOMER_ID) VALUES ('${userId}','${customer.id}');`,
+        (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  }
+
+  private async getUser(userId: string): Promise<any | null> {
+    return await new Promise<any | null>((resolve, reject) => {
+      this.db.get(
+        `select * from user where USER_ID='${userId}';`,
+        (err, row) => {
+          if (err) {
+            resolve(null);
+          } else {
+            console.log(row);
+            resolve(row);
+          }
+        }
+      );
+    });
+  }
+
+  private async getOrCreateUser(userId: string, email: string): Promise<any> {
+    let user = await this.getUser(userId);
+    if (!user) {
+      try {
+        await this.createUser(userId, email);
+        user = await this.getUser(userId);
+      } catch (error) {}
+    }
+    return user;
+  }
 
   private setUserRoutes() {
     /* GET user profile. */
-    this.app.get("/user", (req, res, next) => {
+    this.app.get("/user", async (req, res, next) => {
       let response: any;
       if (!req.user) {
         response = {
@@ -220,8 +286,19 @@ class Server {
         };
       } else {
         const { _raw, _json, ...userProfile } = req.user as any;
-        // get customer data
-        // userProfile.
+        try {
+          const user = await this.getOrCreateUser(
+            userProfile.user_id,
+            userProfile.emails[0].value
+          );
+          const customId = user.CUSTOMER_ID;
+          const customer = await this.squareAPIControl.retrieveCustomer(
+            customId
+          );
+          userProfile.customer_details = customer;
+        } catch (error) {
+          console.log(error);
+        }
         response = userProfile;
       }
       res.send(JSON.stringify(response, null, 2));
@@ -249,7 +326,7 @@ class Server {
   }
 
   private setBookingRoutes() {
-    this.app.get("/api/catalog/list", async (req, res) => {
+    this.app.get("/api/catalog/list", this.secured, async (req, res) => {
       try {
         const items = await this.squareAPIControl.listCatalog();
         res.send(JSON.stringify(items, undefined, 2));
@@ -257,7 +334,7 @@ class Server {
         res.emit("error", error);
       }
     });
-    this.app.post("/api/booking/availability", async (req, res) => {
+    this.app.post("/api/booking/availability", this.secured, async (req, res) => {
       try {
         const filter = req.body;
         const items = await this.squareAPIControl.listBookingAvailability({

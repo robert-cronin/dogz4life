@@ -30,3 +30,5 @@ yarn-error.log*
 
 # sessions
 /sessions
+
+/sql/*.db
