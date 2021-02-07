@@ -35,6 +35,7 @@ interface NewBookingState {
 }
 
 class NewBooking extends React.Component<any, NewBookingState> {
+  brisbaneLocationId = "LMQY4941CGM9H";
   constructor(props) {
     super(props);
 
@@ -128,11 +129,56 @@ class NewBooking extends React.Component<any, NewBookingState> {
     });
   }
 
+  createBooking() {
+    this.setState({ isLoading: true });
+    const newBookingRequest = {
+      appointmentSegments: this.state.selectedAppointmentOption.apointmentSegments.map((a) => {
+        return {
+          teamMemberId: a.teamMemberId,
+          serviceVariationId: a.serviceVariationId,
+          serviceVariationVersion: a.serviceVariationVersion,
+          durationMinutes: a.durationMinutes,
+        };
+      }),
+      startAt: this.state.selectedAppointmentOption.startAt,
+      locationId: this.brisbaneLocationId,
+      customerNote: "sample customer note",
+    };
+    console.log();
+    
+    fetch("/api/booking/new", {
+      body: JSON.stringify(newBookingRequest),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log('booking');
+          console.log(result);
+          console.log('booking');
+          
+          this.setState({
+            isLoading: false,
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoading: false,
+            error,
+          });
+        }
+      );
+  }
+
   onFinish() {
     const selectedOptions = this.state.options.filter((o) => o.isSelected);
     const selectedTime = this.state.selectedAppointmentOption;
     console.log(selectedOptions);
     console.log(selectedTime);
+    this.createBooking()
   }
 
   onFinishFailed(errorInfo) {
@@ -161,15 +207,20 @@ class NewBooking extends React.Component<any, NewBookingState> {
             selectAppointmentOption={(option: AppointmentOption) =>
               this.setState({ selectedAppointmentOption: option })
             }
+            locationId={this.brisbaneLocationId}
           />
         ),
       },
       {
         title: "Booking Confirmation",
-        content: <BookingConfirmation
-        selectedCatalogOptions={this.state.options.filter(o => o.isSelected)} 
-        selectedAppointmentOption={this.state.selectedAppointmentOption} 
-        />,
+        content: (
+          <BookingConfirmation
+            selectedCatalogOptions={this.state.options.filter(
+              (o) => o.isSelected
+            )}
+            selectedAppointmentOption={this.state.selectedAppointmentOption}
+          />
+        ),
       },
     ];
     return (

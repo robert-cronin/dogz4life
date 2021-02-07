@@ -8,6 +8,7 @@ import {
 import AppointmentOptionsList from "./AppointmentOptionsList";
 
 interface BookingCalendarProps {
+  locationId: string;
   serviceVariationIdList: string[];
   selectedAppointmentOption?: AppointmentOption;
   selectAppointmentOption: (option: AppointmentOption) => void;
@@ -40,7 +41,6 @@ class BookingCalendar extends React.Component<
   BookingCalendarProps,
   BookingCalendarState
 > {
-  brisbaneLocationId = "LMQY4941CGM9H";
   constructor(props: BookingCalendarProps | Readonly<BookingCalendarProps>) {
     super(props);
 
@@ -62,7 +62,7 @@ class BookingCalendar extends React.Component<
       isLoading: true,
     });
     const reqBody = createAvailabilityRequestBody(
-      this.brisbaneLocationId,
+      this.props.locationId,
       this.props.serviceVariationIdList,
       date
     );

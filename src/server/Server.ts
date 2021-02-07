@@ -144,7 +144,19 @@ class Server {
     passport.serializeUser((user, done) => {
       done(null, user);
     });
-    passport.deserializeUser((user, done) => {
+    passport.deserializeUser(async (user, done) => {
+      const modifiedUser = user as any;
+      try {
+        const user = await this.getOrCreateUser(
+          modifiedUser.user_id,
+          modifiedUser.emails[0].value
+        );
+        const customId = user.CUSTOMER_ID;
+        const customer = await this.squareAPIControl.retrieveCustomer(customId);
+        modifiedUser.customer_details = customer;
+      } catch (error) {
+        console.log(error);
+      }
       done(null, user);
     });
   }
@@ -172,18 +184,11 @@ class Server {
     this.app.get("/callback", (req, res, next) => {
       passport.authenticate("auth0", (err, user, info) => {
         if (err) {
-          console.log("error");
-          console.log(err);
-
           return next(err);
         }
         if (!user) {
-          console.log("not user");
-
           return res.redirect("/login");
         }
-        console.log("logging in");
-
         req.logIn(user, (err) => {
           if (err) {
             return next(err);
@@ -229,7 +234,7 @@ class Server {
       });
       let customer: Customer;
       if (searchCustomers.length >= 1) {
-        customer = searchCustomers[0]
+        customer = searchCustomers[0];
       } else {
         customer = await this.squareAPIControl.createCustomer({
           referenceId: userId,
@@ -286,19 +291,6 @@ class Server {
         };
       } else {
         const { _raw, _json, ...userProfile } = req.user as any;
-        try {
-          const user = await this.getOrCreateUser(
-            userProfile.user_id,
-            userProfile.emails[0].value
-          );
-          const customId = user.CUSTOMER_ID;
-          const customer = await this.squareAPIControl.retrieveCustomer(
-            customId
-          );
-          userProfile.customer_details = customer;
-        } catch (error) {
-          console.log(error);
-        }
         response = userProfile;
       }
       res.send(JSON.stringify(response, null, 2));
@@ -334,46 +326,53 @@ class Server {
         res.emit("error", error);
       }
     });
-    this.app.post("/api/booking/availability", this.secured, async (req, res) => {
-      try {
-        const filter = req.body;
-        const items = await this.squareAPIControl.listBookingAvailability({
-          query: {
-            filter: {
-              startAtRange: {
-                startAt: filter.startAt,
-                endAt: filter.endAt,
+    this.app.post(
+      "/api/booking/availability",
+      this.secured,
+      async (req, res) => {
+        try {
+          const filter = req.body;
+          const items = await this.squareAPIControl.listBookingAvailability({
+            query: {
+              filter: {
+                startAtRange: {
+                  startAt: filter.startAt,
+                  endAt: filter.endAt,
+                },
+                locationId: filter.locationId,
+                segmentFilters: filter.segmentFilters.map((s) => {
+                  return { serviceVariationId: s.serviceVariationId };
+                }),
               },
-              locationId: filter.locationId,
-              segmentFilters: filter.segmentFilters.map((s) => {
-                return { serviceVariationId: s.serviceVariationId };
-              }),
             },
-          },
-        });
-        res.send(JSON.stringify(items, undefined, 2));
-      } catch (error) {
-        res.emit("error", error);
+          });
+          res.send(JSON.stringify(items, undefined, 2));
+        } catch (error) {
+          res.emit("error", error);
+        }
       }
-    });
+    );
     this.app.post("/api/booking/new", this.secured, async (req, res) => {
       try {
         const body = req.body;
+        console.log(body);
+        
+        const booking = {
+          appointmentSegments: body.appointmentSegments.map((a) => {
+            return {
+              teamMemberId: a.teamMemberId,
+              serviceVariationId: a.serviceVariationId,
+              serviceVariationVersion: a.serviceVariationVersion,
+              durationMinutes: a.durationMinutes,
+            };
+          }),
+          startAt: body.startAt,
+          locationId: body.locationId,
+          customerId: (req.user as any).customer_details.id,
+          customerNote: body.customerNote ?? "",
+        }
         const items = await this.squareAPIControl.newBooking({
-          booking: {
-            appointmentSegments: body.appointmentSegments.map((a) => {
-              return {
-                teamMemberId: a.teamMemberId,
-                serviceVariationId: a.serviceVariationId,
-                serviceVariationVersion: a.serviceVariationVersion,
-                durationMinutes: a.durationMinutes,
-              };
-            }),
-            startAt: body.startAt,
-            locationId: body.locationId,
-            customerId: "some customer id",
-            customerNote: body.customerNote ?? "",
-          },
+          booking,
           idempotencyKey: crypto.randomBytes(32).toString("base64"),
         });
         res.send(JSON.stringify(items, undefined, 2));
