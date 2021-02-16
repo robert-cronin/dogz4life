@@ -1,11 +1,10 @@
 import React from "react";
-import { Steps, Button, message, Card, Form, Space } from "antd";
-import NewClientInfo from "../components/new-client/NewClientInfo";
-import PetInfo from "../components/new-client/PetInfo";
-import PetHealthFlags from "../components/new-client/PetHealthFlags";
+import { Steps, Button, message, Card, Form } from "antd";
+import PetInfo from "./PetInfo";
+import PetHealthFlags from "./PetHealthFlags";
 const { Step } = Steps;
 
-class NewClientPage extends React.Component {
+class NewPetModel extends React.Component {
   state = {
     current: 0,
   };
@@ -31,10 +30,6 @@ class NewClientPage extends React.Component {
   }
 
   steps = [
-    {
-      title: "Client Details",
-      content: <NewClientInfo />,
-    },
     {
       title: "Pet Info",
       content: <PetInfo />,
@@ -96,4 +91,4 @@ class NewClientPage extends React.Component {
   }
 }
 
-export default NewClientPage;
+export default NewPetModel;

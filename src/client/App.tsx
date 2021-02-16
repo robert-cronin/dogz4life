@@ -17,6 +17,7 @@ import PaymentForm from "./components/PaymentForm";
 import ContactFormContent from "./components/contact-form/ContactFormContent";
 import ContactFormTitle from "./components/contact-form/ContactFormTitle";
 import NewBooking from "./pages/NewBooking";
+import Pets from "./pages/Pets";
 
 const { Header, Footer, Content } = Layout;
 
@@ -61,6 +62,9 @@ class App extends React.Component<AppProps, AppState> {
               </Route>
               <Route path="/booking">
                 <NewBooking />
+              </Route>
+              <Route path="/pets">
+                <Pets />
               </Route>
               <Route path="*">
                 <Result
