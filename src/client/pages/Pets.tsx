@@ -3,6 +3,7 @@ import { Button } from "antd";
 import { FileAddOutlined } from "@ant-design/icons";
 import PetsList from "../components/pets/PetsList";
 import FluffyDog from "../static/fluffy-dog.jpg";
+import NewPetModal from "../components/pets/new-pet/NewPetModal";
 
 interface PetInfo {
   id: string;
@@ -41,7 +42,7 @@ class Pets extends React.Component<PetsProps, PetsState> {
           }}
         >
           <h1>Pets</h1>
-          <Button icon={<FileAddOutlined />}>New Pet</Button>
+          <NewPetModal />
         </div>
         <PetsList petsInfos={this.state.petInfos} />
       </div>

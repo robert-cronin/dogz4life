@@ -1,7 +1,7 @@
 import React from "react";
 import Menu from "./components/menu/Menu";
 import DocumentTitle from "react-document-title";
-import { Layout, Popover, Avatar, Button, Affix, Result } from "antd";
+import { Layout, Popover, Avatar, Button, Result } from "antd";
 import { MessageOutlined, CloseOutlined } from "@ant-design/icons";
 import {
   HashRouter as Router,
@@ -11,7 +11,6 @@ import {
   Link,
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import NewClientPage from "./pages/NewClientPage";
 import AboutUs from "./pages/AboutUs";
 import PaymentForm from "./components/PaymentForm";
 import ContactFormContent from "./components/contact-form/ContactFormContent";
@@ -56,9 +55,6 @@ class App extends React.Component<AppProps, AppState> {
               </Route>
               <Route path="/contact">
                 <PaymentForm />
-              </Route>
-              <Route path="/user">
-                <NewClientPage />
               </Route>
               <Route path="/booking">
                 <NewBooking />
