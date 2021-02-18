@@ -25,9 +25,27 @@ interface PetInfoDetails {
   additionalHealthNotes?: string;
 }
 
+interface PetInfoDetailsBody {
+  name: string;
+  type: string;
+  gender: string;
+  desexed?: number;
+  weight?: number;
+  coatColor?: string;
+  birthday?: string;
+  allergies?: string;
+  additionalGeneralNotes?: string;
+  vaccinationRecord?: string;
+  dateAdministered?: string;
+  dateNextDue?: string;
+  healthFlags?: string;
+  additionalHealthNotes?: string;
+}
+
 interface NewPetModalState {
   current: number;
-  loading: boolean;
+  isLoading: boolean;
+  error?: string;
   visible: boolean;
   petInfoDetails: PetInfoDetails;
 }
@@ -38,7 +56,7 @@ class NewPetModal extends React.Component<any, NewPetModalState> {
 
     this.state = {
       current: 0,
-      loading: false,
+      isLoading: false,
       visible: false,
       petInfoDetails: {
         name: "",
@@ -60,12 +78,60 @@ class NewPetModal extends React.Component<any, NewPetModalState> {
     });
   }
 
-  onFinish(values) {
-    console.log("Success:", values);
+  onFinish() {
+    this.setState({isLoading: true})
+
+    const details = this.state.petInfoDetails;
+
+    message.success("Processing complete!");
+    const newPetRequest: PetInfoDetailsBody = {
+      name: details.name,
+      type: details.type,
+      gender: details.gender,
+      desexed: details.desexed ? 1 : 0,
+      weight: details.weight,
+      coatColor: details.coatColor,
+      birthday: details.birthday?.toISOString(),
+      allergies: details.allergies,
+      additionalGeneralNotes: details.additionalGeneralNotes,
+      vaccinationRecord: details.vaccinationRecord,
+      dateAdministered: details.dateAdministered?.toISOString(),
+      dateNextDue: details.dateNextDue?.toISOString(),
+      healthFlags: details.healthFlags
+        ? window.btoa(JSON.stringify(Array.from(details.healthFlags.values())))
+        : undefined,
+      additionalHealthNotes: details.additionalHealthNotes,
+    };
+
+    fetch("/api/pets/new", {
+      body: JSON.stringify(newPetRequest),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log("pet");
+          console.log(result);
+          console.log("pet");
+
+          this.setState({
+            isLoading: false,
+          });
+        },
+        (error) => {
+          this.setState({
+            isLoading: false,
+            error,
+          });
+        }
+      );
   }
 
   onFinishFailed(errorInfo) {
-    console.log("Failed:", errorInfo);
+    message.error("Processing complete!");
   }
 
   showModal = () => {
@@ -75,9 +141,9 @@ class NewPetModal extends React.Component<any, NewPetModalState> {
   };
 
   handleOk = () => {
-    this.setState({ loading: true });
+    this.setState({ isLoading: true });
     setTimeout(() => {
-      this.setState({ loading: false, visible: false });
+      this.setState({ isLoading: false, visible: false });
     }, 3000);
   };
 
@@ -86,7 +152,7 @@ class NewPetModal extends React.Component<any, NewPetModalState> {
   };
 
   render() {
-    const { visible, loading } = this.state;
+    const { visible, isLoading: loading } = this.state;
 
     const steps = [
       {
@@ -142,10 +208,7 @@ class NewPetModal extends React.Component<any, NewPetModalState> {
                 </Button>
               )}
               {this.state.current === steps.length - 1 && (
-                <Button
-                  type="primary"
-                  onClick={() => message.success("Processing complete!")}
-                >
+                <Button type="primary" onClick={() => this.onFinish()}>
                   Done
                 </Button>
               )}
@@ -178,4 +241,4 @@ class NewPetModal extends React.Component<any, NewPetModalState> {
 }
 
 export default NewPetModal;
-export { PetInfoDetails };
+export { PetInfoDetails,PetInfoDetailsBody };

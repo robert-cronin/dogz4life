@@ -23,7 +23,7 @@ class PetInfo extends React.Component<PetInfoProps, any> {
     return (
       <>
         <Row gutter={50}>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item
               label="Pet Name"
               name="petname"

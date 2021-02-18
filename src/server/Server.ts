@@ -20,6 +20,25 @@ import { Database } from "sqlite3";
 import { Customer } from "square";
 loadEnv();
 
+interface PetInfoDetails {
+  // general info
+  name: string;
+  type: string;
+  gender: string;
+  desexed?: boolean;
+  weight?: number;
+  coatColor?: string;
+  birthday?: string;
+  allergies?: string;
+  additionalGeneralNotes?: string;
+  vaccinationRecord?: string;
+  dateAdministered?: string;
+  dateNextDue?: string;
+  // health flags
+  healthFlags?: string;
+  additionalHealthNotes?: string;
+}
+
 class Server {
   app: express.Express;
   contactManager: ContactManager;
@@ -81,6 +100,9 @@ class Server {
 
     // square routes
     this.setBookingRoutes();
+
+    // pet routes
+    this.setPetRoutes();
 
     // contact us route
     this.setContactUsRoute();
@@ -356,7 +378,7 @@ class Server {
       try {
         const body = req.body;
         console.log(body);
-        
+
         const booking = {
           appointmentSegments: body.appointmentSegments.map((a) => {
             return {
@@ -370,12 +392,95 @@ class Server {
           locationId: body.locationId,
           customerId: (req.user as any).customer_details.id,
           customerNote: body.customerNote ?? "",
-        }
+        };
         const items = await this.squareAPIControl.newBooking({
           booking,
           idempotencyKey: crypto.randomBytes(32).toString("base64"),
         });
         res.send(JSON.stringify(items, undefined, 2));
+      } catch (error) {
+        res.emit("error", error);
+      }
+    });
+  }
+
+  //////////
+  // Pets //
+  //////////
+  private async getPetInfoList(userId: string): Promise<PetInfoDetails[]> {
+    return await new Promise<PetInfoDetails[]>((resolve, reject) => {
+      this.db.all(
+        `select * from user as u INNER JOIN pet as p ON u.CUSTOMER_ID = p.CUSTOMER_ID where USER_ID='${userId}';`,
+        (err, rows) => {
+          if (err) {
+            resolve([]);
+          } else {
+            console.log(rows);
+            resolve(rows ?? []);
+          }
+        }
+      );
+    });
+  }
+  private async createPetInfo(
+    userId: string,
+    petInfo: PetInfoDetails
+  ): Promise<void> {
+    return await new Promise<void>(async (resolve, reject) => {
+      console.log("heyyy");
+
+      try {
+        const user = await this.getUser(userId);
+        const fields: string[] = ["CUSTOMER_ID"];
+        const values: string[] = [user.CUSTOMER_ID];
+        for (const key of Object.keys(petInfo)) {
+          const value: any | undefined = petInfo[key];
+          if (value) {
+            fields.push(key);
+            values.push(value);
+          }
+        }
+
+        const fieldsString = fields.reduce(
+          (prev, curr) => `${prev ? `${prev}, ` : ""}'${curr}'`,
+          ""
+        );
+        const valuesString = values.reduce(
+          (prev, curr) => `${prev ? `${prev}, ` : ""}'${curr}'`,
+          ""
+        );
+
+        this.db.exec(
+          `insert into pet (${fieldsString}) values (${valuesString})`,
+          (err) => {
+            if (err) {
+              reject();
+            } else {
+              resolve();
+            }
+          }
+        );
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  private setPetRoutes() {
+    this.app.get("/api/pets/list", this.secured, async (req, res) => {
+      try {
+        const userId = (req.user as any).user_id;
+        const petInfoList = await this.getPetInfoList(userId);
+        res.send(JSON.stringify(petInfoList, undefined, 2));
+      } catch (error) {
+        res.emit("error", error);
+      }
+    });
+    this.app.post("/api/pets/new", this.secured, async (req, res) => {
+      try {
+        const userId = (req.user as any).user_id;
+        const petInfo = req.body;
+        await this.createPetInfo(userId, petInfo);
+        res.end();
       } catch (error) {
         res.emit("error", error);
       }
