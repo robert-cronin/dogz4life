@@ -74,7 +74,6 @@
         "webpack-dev-server": "^3.11.2"
     },
     "scripts": {
-        "webpack-dev-server": "webpack-dev-server --mode development --config ./webpack.config.client.ts",
         "watch:client": "webpack --watch --mode development --config ./webpack.config.client.ts",
         "watch:server": "tsc --build tsconfig.server.json --watch",
         "watch:nodemon": "nodemon -r dotenv/config ./build/server/Server.js --watch ./build",

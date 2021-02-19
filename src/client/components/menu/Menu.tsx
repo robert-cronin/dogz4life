@@ -35,7 +35,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
   }
 
   componentDidMount() {
-    fetch("/user")
+    fetch("/site/user")
       .then((res) => res.json())
       .then(
         (userProfile) => {
@@ -128,7 +128,7 @@ class Menu extends React.Component<NavigationProps, NavigationState> {
               route=""
               onButtonClick={() => {
                 this.handleButtonClick();
-                window.location.href = '/login'
+                window.location.replace('/site/login')
               }}
             />
           )}

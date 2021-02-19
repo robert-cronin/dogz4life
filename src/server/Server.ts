@@ -45,6 +45,7 @@ class Server {
   squareAPIControl: SquareAPIControl;
   db: Database;
   dbPath: string = path.join(__dirname, "..", "..", "sql", "dogz4life.db");
+  baseUrl = "/site";
 
   createTables() {
     try {
@@ -88,6 +89,11 @@ class Server {
     this.app.use(express.json());
     this.contactManager = new ContactManager();
     this.squareAPIControl = new SquareAPIControl();
+
+    // // redirection
+    // this.redirectToHttps();
+    this.redirectToSquareSite();
+
     // auth routes
     this.setupSession();
     this.setupPassport();
@@ -106,10 +112,6 @@ class Server {
 
     // contact us route
     this.setContactUsRoute();
-
-    // // redirection
-    // // this.redirectToHttps();
-    // // this.redirectToSquareSite();
   }
 
   start() {
@@ -118,8 +120,10 @@ class Server {
     httpServer.listen(80, "0.0.0.0");
 
     // run https server (port 443)
-    // const sslPath = "/etc/letsencrypt/live/dogz4life.com.au";
-    const sslPath = path.resolve(__dirname, "../../tmp");
+    const sslPath =
+      env.NODE_ENV == "production"
+        ? "/etc/letsencrypt/live/dogz4life.com.au"
+        : path.resolve(__dirname, "../../tmp");
 
     const key = fs.readFileSync(path.join(sslPath, "privkey.pem"));
     const cert = fs.readFileSync(path.join(sslPath, "cert.pem"));
@@ -148,9 +152,10 @@ class Server {
         domain: env.AUTH0_DOMAIN,
         clientID: env.AUTH0_CLIENT_ID,
         clientSecret: env.AUTH0_CLIENT_SECRET,
-        callbackURL: "https://localhost/callback",
-        // callbackURL:
-        //   env.AUTH0_CALLBACK_URL || "https://localhost/callback",
+        callbackURL:
+          env.NODE_ENV == "production"
+            ? `https://dogz4life.com.au${this.baseUrl}/callback`
+            : `https://localhost${this.baseUrl}/callback`,
       },
       (accessToken, refreshToken, extraParams, profile, done) => {
         // accessToken is the token to call Auth0 API (not needed in the most cases)
@@ -185,13 +190,15 @@ class Server {
 
   private setStaticRoutes() {
     // serve static resources
-    this.app.use(express.static(path.join(__dirname, "..", "client")));
+    this.app.use("/site", express.static(path.join(__dirname, "..", "client")));
   }
 
   private setAuthorizationRoutes() {
     // Perform the login, after login Auth0 will redirect to callback
+    console.log(`${this.baseUrl}/login`);
+    
     this.app.get(
-      "/login",
+      `${this.baseUrl}/login`,
       passport.authenticate("auth0", {
         scope: "openid email profile",
       }),
@@ -199,11 +206,11 @@ class Server {
         res.redirect("/");
       }
     );
-    this.app.get("/logged_in", (req, res) => {
+    this.app.get(`${this.baseUrl}/logged_in`, (req, res) => {
       console.log(req.user);
     });
 
-    this.app.get("/callback", (req, res, next) => {
+    this.app.get(`${this.baseUrl}/callback`, (req, res, next) => {
       passport.authenticate("auth0", (err, user, info) => {
         if (err) {
           return next(err);
@@ -221,13 +228,13 @@ class Server {
           console.log("the returnTo address:", returnTo);
 
           delete req.session["returnTo"];
-          res.redirect(returnTo || "/user");
+          res.redirect(returnTo || `${this.baseUrl}/user`);
         });
       })(req, res, next);
     });
 
     // Perform session logout and redirect to homepage
-    this.app.get("/logout", (req, res) => {
+    this.app.get(`${this.baseUrl}/logout`, (req, res) => {
       req.logout();
       let returnTo = req.protocol + "://" + req.hostname;
       const port = req.connection.localPort;
@@ -305,7 +312,7 @@ class Server {
 
   private setUserRoutes() {
     /* GET user profile. */
-    this.app.get("/user", async (req, res, next) => {
+    this.app.get(`${this.baseUrl}/user`, async (req, res, next) => {
       let response: any;
       if (!req.user) {
         response = {
@@ -319,37 +326,45 @@ class Server {
     });
 
     // POST new user
-    this.app.get("/user/new", this.secured, async (req, res, next) => {
-      const { _raw, _json, ...userProfile } = req.user as any;
-      const {
-        name: { familyName, givenName },
-        emails,
-        nickname,
-        user_id,
-        ...rest
-      } = userProfile;
-      const response = await this.squareAPIControl.createCustomer({
-        givenName,
-        familyName,
-        nickname,
-        referenceId: user_id,
-        emailAddress: emails[0].value,
-      });
-      res.send(JSON.stringify(response, null, 2));
-    });
+    this.app.get(
+      `${this.baseUrl}/user/new`,
+      this.secured,
+      async (req, res, next) => {
+        const { _raw, _json, ...userProfile } = req.user as any;
+        const {
+          name: { familyName, givenName },
+          emails,
+          nickname,
+          user_id,
+          ...rest
+        } = userProfile;
+        const response = await this.squareAPIControl.createCustomer({
+          givenName,
+          familyName,
+          nickname,
+          referenceId: user_id,
+          emailAddress: emails[0].value,
+        });
+        res.send(JSON.stringify(response, null, 2));
+      }
+    );
   }
 
   private setBookingRoutes() {
-    this.app.get("/api/catalog/list", this.secured, async (req, res) => {
-      try {
-        const items = await this.squareAPIControl.listCatalog();
-        res.send(JSON.stringify(items, undefined, 2));
-      } catch (error) {
-        res.emit("error", error);
+    this.app.get(
+      `${this.baseUrl}/api/catalog/list`,
+      this.secured,
+      async (req, res) => {
+        try {
+          const items = await this.squareAPIControl.listCatalog();
+          res.send(JSON.stringify(items, undefined, 2));
+        } catch (error) {
+          res.emit("error", error);
+        }
       }
-    });
+    );
     this.app.post(
-      "/api/booking/availability",
+      `${this.baseUrl}/api/booking/availability`,
       this.secured,
       async (req, res) => {
         try {
@@ -374,34 +389,38 @@ class Server {
         }
       }
     );
-    this.app.post("/api/booking/new", this.secured, async (req, res) => {
-      try {
-        const body = req.body;
-        console.log(body);
+    this.app.post(
+      `${this.baseUrl}/api/booking/new`,
+      this.secured,
+      async (req, res) => {
+        try {
+          const body = req.body;
+          console.log(body);
 
-        const booking = {
-          appointmentSegments: body.appointmentSegments.map((a) => {
-            return {
-              teamMemberId: a.teamMemberId,
-              serviceVariationId: a.serviceVariationId,
-              serviceVariationVersion: a.serviceVariationVersion,
-              durationMinutes: a.durationMinutes,
-            };
-          }),
-          startAt: body.startAt,
-          locationId: body.locationId,
-          customerId: (req.user as any).customer_details.id,
-          customerNote: body.customerNote ?? "",
-        };
-        const items = await this.squareAPIControl.newBooking({
-          booking,
-          idempotencyKey: crypto.randomBytes(32).toString("base64"),
-        });
-        res.send(JSON.stringify(items, undefined, 2));
-      } catch (error) {
-        res.emit("error", error);
+          const booking = {
+            appointmentSegments: body.appointmentSegments.map((a) => {
+              return {
+                teamMemberId: a.teamMemberId,
+                serviceVariationId: a.serviceVariationId,
+                serviceVariationVersion: a.serviceVariationVersion,
+                durationMinutes: a.durationMinutes,
+              };
+            }),
+            startAt: body.startAt,
+            locationId: body.locationId,
+            customerId: (req.user as any).customer_details.id,
+            customerNote: body.customerNote ?? "",
+          };
+          const items = await this.squareAPIControl.newBooking({
+            booking,
+            idempotencyKey: crypto.randomBytes(32).toString("base64"),
+          });
+          res.send(JSON.stringify(items, undefined, 2));
+        } catch (error) {
+          res.emit("error", error);
+        }
       }
-    });
+    );
   }
 
   //////////
@@ -466,29 +485,37 @@ class Server {
     });
   }
   private setPetRoutes() {
-    this.app.get("/api/pets/list", this.secured, async (req, res) => {
-      try {
-        const userId = (req.user as any).user_id;
-        const petInfoList = await this.getPetInfoList(userId);
-        res.send(JSON.stringify(petInfoList, undefined, 2));
-      } catch (error) {
-        res.emit("error", error);
+    this.app.get(
+      `${this.baseUrl}/logged_in/api/pets/list`,
+      this.secured,
+      async (req, res) => {
+        try {
+          const userId = (req.user as any).user_id;
+          const petInfoList = await this.getPetInfoList(userId);
+          res.send(JSON.stringify(petInfoList, undefined, 2));
+        } catch (error) {
+          res.emit("error", error);
+        }
       }
-    });
-    this.app.post("/api/pets/new", this.secured, async (req, res) => {
-      try {
-        const userId = (req.user as any).user_id;
-        const petInfo = req.body;
-        await this.createPetInfo(userId, petInfo);
-        res.end();
-      } catch (error) {
-        res.emit("error", error);
+    );
+    this.app.post(
+      `${this.baseUrl}/api/pets/new`,
+      this.secured,
+      async (req, res) => {
+        try {
+          const userId = (req.user as any).user_id;
+          const petInfo = req.body;
+          await this.createPetInfo(userId, petInfo);
+          res.end();
+        } catch (error) {
+          res.emit("error", error);
+        }
       }
-    });
+    );
   }
 
   private setContactUsRoute() {
-    this.app.get("/api/contact_us", async (req, res) => {
+    this.app.get(`${this.baseUrl}/api/contact_us`, async (req, res) => {
       const { fromEmail, name, message } = req.body;
       const info = await this.contactManager.sendContactMail(
         fromEmail,
@@ -501,13 +528,16 @@ class Server {
 
   private redirectToHttps() {
     // redirect to https
-    this.app.use((req, res, next) => {
-      if (
-        env.NODE_ENV === "production" &&
-        req.headers["x-forwarded-proto"] !== "https"
-      ) {
+    this.app.use("*", (req, res, next) => {
+      console.log("redirecting");
+
+      if (req.headers["x-forwarded-proto"] !== "https") {
+        console.log("redirecting2");
         // the statement for performing our redirection
-        return res.redirect("https://" + req.headers.host + req.url);
+        const redirectUrl = "https://" + req.headers.host + req.url;
+        console.log(redirectUrl);
+
+        return res.redirect(redirectUrl);
       } else {
         return next();
       }
@@ -516,6 +546,8 @@ class Server {
 
   private redirectToSquareSite() {
     this.app.get("/", (req, res) => {
+      console.log(req.originalUrl);
+
       return res.redirect("https://dogz-4-life.square.site/");
     });
   }
@@ -530,7 +562,7 @@ class Server {
       return next();
     }
     req.session["returnTo"] = req.originalUrl;
-    res.redirect("/login");
+    res.redirect(`${this.baseUrl}/login`);
   }
 }
 

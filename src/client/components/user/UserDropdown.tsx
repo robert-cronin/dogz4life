@@ -5,6 +5,7 @@ import {
   LogoutOutlined,
   ProfileOutlined,
 } from "@ant-design/icons";
+import MenuButton from "../menu/MenuButton";
 
 interface UserDropdownProps {
   userProfile: any;
@@ -20,13 +21,17 @@ class UserDropdown extends React.Component<UserDropdownProps, any> {
         <Menu.Item key="1" icon={<ProfileOutlined />}>
           My Information
         </Menu.Item>
-        <Menu.Item key="2" icon={<UserOutlined />}>
+        <Menu.Item
+          key="2"
+          icon={<UserOutlined />}
+          onClick={() => (window.location.hash = "#/pets")}
+        >
           Manage Pets
         </Menu.Item>
         <Menu.Item
           key="3"
           icon={<LogoutOutlined />}
-          onClick={() => window.location.replace("/logout")}
+          onClick={() => window.location.replace("/site/logout")}
         >
           Logout
         </Menu.Item>
