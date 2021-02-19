@@ -34,7 +34,7 @@
         "react-square-payment-form": "^0.7.2",
         "redux": "^4.0.5",
         "session-file-store": "^1.5.0",
-        "sqlite3": "^5.0.1",
+        "sqlite3": "5.0.0",
         "square": "^8.1.0",
         "ts-dotenv": "^0.8.3",
         "web-vitals": "^0.2.4"
