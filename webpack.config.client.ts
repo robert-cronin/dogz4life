@@ -67,21 +67,6 @@ const clientConfig = {
       ],
     }),
   ],
-  devServer: {
-    contentBase: path.resolve(
-      __dirname,
-      "src",
-      "client",
-      "static",
-      "index.html"
-    ),
-    compress: true,
-    port: 9000,
-    hot: true,
-    https: true,
-    key: fs.readFileSync("./tmp/privkey.pem"),
-    cert: fs.readFileSync("./tmp/cert.pem"),
-  },
 };
 
 module.exports = [clientConfig];
