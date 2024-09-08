@@ -92,7 +92,7 @@ class Server {
 
     // // redirection
     // this.redirectToHttps();
-    this.redirectToSquareSite();
+    // this.redirectToSquareSite();
 
     // auth routes
     this.setupSession();
@@ -190,13 +190,13 @@ class Server {
 
   private setStaticRoutes() {
     // serve static resources
-    this.app.use("/site", express.static(path.join(__dirname, "..", "client")));
+    this.app.use("/", express.static(path.join(__dirname, "..", "client")));
   }
 
   private setAuthorizationRoutes() {
     // Perform the login, after login Auth0 will redirect to callback
     console.log(`${this.baseUrl}/login`);
-    
+
     this.app.get(
       `${this.baseUrl}/login`,
       passport.authenticate("auth0", {
@@ -305,7 +305,7 @@ class Server {
       try {
         await this.createUser(userId, email);
         user = await this.getUser(userId);
-      } catch (error) {}
+      } catch (error) { }
     }
     return user;
   }
@@ -548,7 +548,7 @@ class Server {
     this.app.get("/", (req, res) => {
       console.log(req.originalUrl);
 
-      return res.redirect("https://dogz-4-life.square.site/");
+      return res.redirect("https://dogz-4-life-aus.square.site/");
     });
   }
 
